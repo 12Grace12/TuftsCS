@@ -1,0 +1,132 @@
+Comp40 Assignment 6: Universal Machine
+by Ben Tanen and Rebecca Larson
+
+1. We have not collaborated with others on this assignment.
+
+2. All aspects of the assignment have been correctly implemented, including the
+   UM, the memory segments, and the unit tests.
+
+3. The significant departure from our design is how we map the next available
+   segment. In our design, we just had a loop for all possible segments (2^32)
+   and grabbed the next available in the loop to map each segment. However, 
+   this proved to be very slow, so we changed how we mapped another segment.
+   We created a Stack that is filled with each segment that has been unmapped.
+   To map a new segment, we pop the unmapped segment from the stack and map it.
+   If the stack is empty, then we map a new segment with the next consecutive
+   segment ID in the Sequence of segments. 
+
+4. Our Universal Machine includes three modules: UM.c, UM_instructions.c, and
+   seg.c.
+
+   UM.c: This module contains all functions that interact with the UM and
+         memory segments. The UM is a struct that contains the Sequence of
+         memory segments, a Stack of available segments (unmapped), a uint32_t
+         program counter, and an array of eight uint32_t registers. It creates 
+         the UM, reads and runs the program, and frees all allocated memory 
+         before halting. It includes all of the functions that are needed by 
+         the instructions. It knows the secret of how to use memory segments 
+         within the Sequence of the UM.
+
+   UM_instructions.c: This module contains the 14 functions for each 
+                      instruction. It uses the functions in UM.c to compute
+                      the instruction if needed. It can only interact with
+                      the UM.
+
+   seg.c: This module contains all functions to manipulate the memory segments.
+          Each memory segment is a struct that contains a boolean saying if is
+          mapped or unmapped, an unsigned length, a uint32_t segment ID, and an
+          array of uint32_t's that contains the words within the segment. It is
+          the only module that can change the contents of a memory segment. It 
+          interacts with the UM module to use the segments. 
+
+5. Our program takes about 9.4 seconds to execute 50 million instructions. We 
+   know this after conducting several tests on the UM to determine that it can
+   compute approximately 5.3 million instructions per second.
+
+6. Below are a list of the unit tests we created to test our UM and their
+   explanations:
+
+   IO: This tests the UM's ability to input and output a value. It stores the 
+       input in register 1 and then outputs the value within register 1. This
+       should be the same value. 
+
+   load_program: This tests the load program function of the UM. It loads the
+                 value 3 and tells load program to go to instruction 3, which
+                 should be an instruction that outputs the word "Success!"
+
+   math: This tests the three mathematical operations of the UM: addition,
+         multiplication, and division. After each operation, it outputs the
+         computed value. With the values we tested, the correct output is
+         "e266".
+
+   seg_store_load: This tests the UM's ability to map a segment, store a value
+                   in that segment, and then load the value and output it. The
+                   output should be the value that was originally stored in the
+                   segment, which for this test is 4. 
+
+   map_unmap: This tests the UM's ability to map a segment, unmap it, and then 
+              map it again to be used again. To test that is has been properly
+              unmapped, we make sure that the remapped segment contains only
+              words set to 0. A segment is mapped and a value is stored in it. 
+              This value is loaded and outputted. Then, the segment is unmapped
+              and mapped. An addition instruction is executed to confirm that
+              the remapped segment contains only words set to 0. The correct 
+              output is "4!"
+
+   load_other_seg: This test the UM's ability to use load program from a 
+                   nonzero segment. First, a new segment is mapped with length
+                   100 and given an instruction. There is some computation done 
+                   in order to store the instruction due to the restrictions of
+                   the Bitpack module. In this case, the instruction is halt.
+                   Load program is used to copy the contents of the new segment
+                   with the newly stored instruction to $m[0] and set the 
+                   program counter to 0. This should make the instruction in 
+                   nonzero segment executed, so the program should be halted. 
+                   If it fails to do this, the program prints out "Bad". Thus,
+                   the correct output is nothing.  
+
+   for_loop: This tests conditional move and load program by creating a for 
+             loop that increments and outputs a given value by 1 a certain
+             number times. The correct output is "0123456789:;<=>?@\nloop 
+             finished\n". 
+
+   all_instructions: This tests all 14 instructions in one test. It takes an 
+                     input and then does many computations and outputs the
+                     results. With an input of "6" the correct output is "6!xy".
+
+The following test cases test each of the eight failure cases described in the 
+specifications. These were written and used for our own testing to ensure our 
+UM failed the way we wanted it to, but should not be used for grading. Unless 
+otherwise specified, the program terminates because an assertion has been 
+raised.
+
+   failure_case_1: This tests the first failure case. It ensures that the 
+                   program fails if the program counter points outside of
+                   the bounds of $m[0]. 
+
+   failure_case_2: This tests that the program fails when an invalid 
+                   instruction is given (not between 0 and 13). 
+
+   failure_case_3: This tests that the program fails when a user attempts
+                   to load a value from an unmapped segment.
+
+   failure_case_4: This tests that the program fails when the user attempts
+                   to load a value that is outside the bounds of the mapped
+                   segment.
+
+   failure_case_5: This tests that the program fails when a user attempts to
+                   unmap a segment that is already unmapped.
+
+   failure_case_6: This tests that the program fails when a user tries to 
+                   divide by 0.
+
+   failure_case_7: This tests that the program fails when a user attempts
+                   to use load program on an unmapped segment.
+
+   failure_case_8: This tests that the program doesn't try to output anything
+                   if the value is greater than 255. It doesn't raise an
+                   assertion, the program just doesn't output anything.
+
+7. We spent approximately 3 hours analyzing the assignment, 3 hours preparing
+   the design, and 8 hours solving the problems after the analysis.
+

@@ -1,0 +1,8 @@
+              |  i  | nums[i] | sum |
+Before Loop   |  -  |   -     |  0  |
+After Run-1   |  0  |   8     |  8  |
+After Run-2   |  1  |   10    |  18 |
+After Run-3   |  2  |   3     |  21 |
+After Run-4   |  3  |   2     |  23 |
+After Run-5   |  4  |   9     |  32 |
+After Loop    |  5  |   0     |  32 | --> returns (sum/i) = (32/5) = 6.4 = avg

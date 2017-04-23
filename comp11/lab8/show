@@ -1,0 +1,25 @@
+#!/bin/sh
+
+	. spots
+
+	#
+	# args are row number and colnumber (in C4 coords)
+	# and color
+	#
+	show_at()
+	{
+		RR=`expr 3 + $1 \* 5`
+		CC=`expr 3 + $2 \* 5`
+		goto $RR $CC
+		case $3 in
+			red)	red
+				echo R
+				;;
+			yellow)	yellow
+				echo Y
+				;;
+		esac
+		printf "
+	clear
+	sh dobox
+	

@@ -1,0 +1,9 @@
+Name: Benjamin Tanen (Ben-jam-in Tan-in)
+
+Documentation: I think I did a good job documenting my code. The only case analysis I did was based on invalid parameters. Otherwise I believe I hit the other criteria.
+Form: I believe I hit all of the marks for Form with the exception of the closing parenthesis style. However, there was a post of Piazza that made it seem that we could ignore this mark as long as it was still clear, which I believe mine is.
+Naming: I believe I followed all of the guidelines for naming convention. I think my only weak points are my helper functions which are used to recurse and I tried to give the best name that wasn't "reprime-recurse".
+Structure: I believe my code is very clear and simplified down to the best it can be. I used helper functions at a minimum and the rest of my code is quite simple to follow along with.
+Correctness: I did a fair amount of testing and after running all of these tests, I have found my functions are correct.
+
+Length of Assignment: 4-5hrs

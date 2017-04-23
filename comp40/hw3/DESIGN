@@ -1,0 +1,208 @@
+# McKenzie Welter and Ben Tanen
+## Assignment 3: Locality and the costs of loads and stores
+### Design
+
+Design Checklist for Part A: Improving locality through blocking
+
+1. What is the abstract thing you are trying to represent?
+
+   We will be representing a polymorphic Blocked 2-dimensional arrays, such that
+   elements in a particular block are located near each other in memory.
+   Additionally, mapping of this data structure is done by blocks, rather
+   than rows or columns.
+
+2. What functions will you offer, and what are the contracts that those
+functions must meet?
+  
+   UArray2b_new will return a UArray2b when passed positive integers for
+   width and height of the 2D array, size of the elements to be stored in the
+   array, and the size of one side of a block. If any of the parameters passed
+   are negative, this result in a checked runtime error.
+   
+   UArray2b_new_64K_block will function the same as _new - allocates
+   memory, results in error if passed inappropriate parameters -  but does not  
+   require a block size, instead it initializes the array with a block size as  
+   large as possible such that one block will be no larger than 64KB.
+   
+   UArray2b_free when passed a pointer to a UArray2b, deleted the UArray2b
+   and deallocates memory associated with it.
+   
+   UArray2b_width, UArray2b_height, UArray2b_size, and UArray2b_blocksize, all
+   return their respective namesakes when passed a UArray2b.
+   
+   UArray2b_at will return a pointer to the index in the UArray2b at the
+   indicated index when it is passed a UArray2b and two integers
+   (representing column and row) within the dimensions of the UArray2b. If any
+   of these values are invalid - column or row are outside the bounds of the
+   UArray - a checked runtime error will occur.
+
+   UArray2b_map will apply a provided function to all elements in a given
+   UArray2b in block order, visiting each cell of a particular block before
+   moving to the next block.
+
+   If a NULL T is passed to any of the above functions, a checked runtime error
+   will occur.
+   
+3. What examples do you have of what the functions are supposed to do?
+   
+   See examples for UArray2 used in Homework 2, UArray2 and UArray2b are
+   idealistically identical.
+
+4. What representation will you use, and what invariants will it satisfy? (This
+question is especially important to answer precisely.)
+
+   The 2D array of blocks will be represented by a UArray2 of blocks, and
+   these blocks will be represented as UArray2s of the elements that the
+   blocked array is storing.
+   
+   Invariants :
+     -the height and width of each block will be the same and all
+     blocks will be the same size, this will be verified when memory is
+     allocated in UArray2b_new.
+     -elements within a given block will be allocated near each other in memory,
+     this is maintained by the fact that each block is allocated separately as a
+     UArray2.
+     
+
+5. When a representation satisfies all invariants, what abstract thing from step
+1 does it represent? That is, what is the inverse mapping from any particular
+representation to the abstraction that it represents. (This question is also
+especially important to answer precisely.)
+
+   Our representation will hold the variables height, width, size, blocksize,
+   and blocks. Height and width will represent the dimensions of the overall 2D
+   array of memory being stored. Size represents the size of the individual
+   elements being stored. Block size represents the dimension of the square
+   blocks stored in the 2D array, blocks. Blocks represents the 2D array of
+   blocks - in which each block is a 2D array of the individual elements being
+   stored.
+
+6. What test cases have you devised?
+
+   See test cases for UArray2 used in Homework 2, UArray2 and UArray2b are
+   idealistically identical.
+
+7. What programming idioms will you need?
+
+   In our implementation, we will be using the idiom to use void ** pointers 
+   because our ADT UArray2b is already a pointer to a struct and when the user
+   will attempt to free the UArray2, they must pass us a pointer to the
+   particular UArray2b, which is actually a void pointer to a pointer.
+
+   In order to add a layer of abstraction, we will also be using empty structs
+   to hide member variables of our ADT. This allows the user to work with the
+   struct without actually accessing the individual components
+
+   Also, for obvious reasons, we will be using unboxed arrays and their relevant
+   idioms.
+
+Translation of cell coordinates - 
+   Give a user-specified cell coordinate, we will convert to the location in
+   our representation by finding the block index and then determining the
+   coordinate within that block.
+   We will determine block index by dividing the dimensions (row and column) by
+   the blocksize (ex: block_row = row / block_size)
+   To determine the index within the particular block, we will use the 
+   remainders of these two divisions. (ex: row_in_block = row%block_size)
+
+   From a location in our representation, we will convert to a cell-coordinate
+   that is meaningful to the user, by using the following functions:
+   row = row_in_block + block_row(block_size)
+   col = col_in_block + block_row(block_size)
+
+Design Checklist for Part C: ppmtrans, a program with straightforward locality
+properties
+
+1. What problem are you trying to solve?
+
+   We are attempting to create an image translation suite, which will perform
+   various translations and transformations on a given ppm image.
+
+2. What example inputs will help illuminate the problem?
+
+   An example input would be any ppm image. The point of this program is to
+   perform translations on this image in a specified way.
+
+3. What example outputs go with those example inputs?
+
+   Example outputs would be modified versions of the given ppm images. For
+   example, if the user specified "-rotate 90", the output would be a rotation
+   of the input image by 90 degrees clockwise.
+
+4. Into what steps or subproblems can you break down the problem?
+
+   1) Read in and verify image
+   2) Storing the image in a blocked 2D UArray
+   3) Performing specified translation
+   4) Outputting translated image
+
+5. What data are in each subproblem?
+
+   1) Image file and specifications for translation, both given by the user
+   2) Image file and associated data (height, width, etc.)
+   3) Specifications for translation, blocked 2D UArray(s)
+   4) Blocked 2D UArray(s)
+
+6. What code or algorithms go with that data?
+
+   1) Reading in the image file, using pnm.h, and storing translation
+      specifications using provided code for handling command-line options
+   2) Code from A2 method bank for dealing with block 2D UArrays
+   3) Algorithms will vary based on translation specifications
+   4) Code from A2 method bank for dealing with blocked 2D UArrays for
+      outputting data.
+
+7. What abstractions will you use to help solve the problem?
+
+   We will be using the UArray2b interface accessed through the A2 method bank.
+
+8. If you have to create new abstractions, what are their design checklists?
+
+   (See Design Checklist for Part A above)
+
+9. What invariant properties should hold during the solution of the problem?
+
+   The image itself will never change, just the alignment of it.
+   The size of the image will never change.
+
+10. What algorithms might help solve the problem?
+
+   We will be using the in-place matrix transposition algorithm to rotate
+   images.
+
+11. What are the major components of your program, and what are their
+interfaces? Components include functions as well as abstract data types. An
+interface includes contracts as well as function prototypes.
+
+   We will be using pnm.h to handle reading in and verifying pnm files and the
+   A2 method bank to store and interact with the image in a 2D array.
+
+12. How do the components in your program interact? That is, what is the
+architecture of your program?
+
+   We read in the pnm file from the user, copy information from the image file
+   into the 2D array and apply transformation on the image using the A2 method
+   bank, and output the modified image information to the user.
+
+13. What test cases will you use to convince yourself that your program works?
+   
+   The following tests, all performed on both square and non-square images:
+   - Rotations of all four increments (90-degrees, 180-degrees, 270-degrees, 0)
+   - Flipping horizontally and vertically (separately)
+   - Combinations of these functions (ex. 90-rotate and horiz flip)
+
+   Additional test for validation of input:
+   - Pass an improper file type
+
+14. What arguments will you use to convince a skeptical audience that your
+program works?
+
+   In order to convince skeptical audiences, we would show them the results of
+   our many many tests above. We challenge them use our program correctly and
+   get an unexpected error.
+
+   Also the follow arguments:
+   - "Yo dude, we make sure that it's the right kind of file."
+   - "Man we totally flip the images SUPER good"
+   - "Our rotations are so sick, any degree that's a multiple of 90, we do good"
+

@@ -1,0 +1,61 @@
+# COMP 40
+## Assignment 3: Locality and the costs of loads and stores
+### Written by: Benjamin Tanen and McKenzie Welter
+
+Assistance: a significant amount of assistance from Daniel Kane in finding a 
+            bug in the UArray2b implementation. Thank you Daniel. You have an
+            awesome beard.
+
+Implementation: all parts have been correctly implemented.
+
+Architecture:
+        UArray2b - this abstract data type was implemented using a previously
+        implemented ADT of UArray2. UArray2 was implemented as a long UArray
+        (a 1-dimensional array implementation from the Hanson library) with
+        indexing into 2D array in row-column order using the equation:
+        1D_index = 2D_row*2D_array_width + 2D_col. The blocked 2-dimensional
+        array (UArray2b) was implemented as a UArray2 of blocks, where each
+        block was also a UArray2.
+
+        ppmtrans - Reads a .ppm image from the command line, creates a new .ppm
+        image, maps through the original image (storing the accessed pixel in
+        the appropriate index of the new .ppm image pixmap based on the
+        command-line-indicated transformation), outputs the new .ppm. In order
+        to access the new .ppm image while mapping through the original, we
+        store it in a  closure struct, which also contains the A2 methods suite.
+        
+        a2plain.c - implementation of the A2 Methods suite using a UArray2. All
+        functions simply call the corresponding function in UArray2.c.
+
+Efficiency:
+(all efficiency rates measured in seconds it took to run ./ppmtrans on mobo.ppm
+ with the specified mapping order and rotation)
+                      row-major access  column-major-access  block-major access
+90-degree rotation  |       3.75       |        4.25        |       6.50
+180-degree rotation |       5.20       |        5.41        |       7.21      
+
+        The above measurements are the fastest times we observed for each case.
+        Over the course of our testing, time taken to run each program went down
+        within the specifications. This is due to the image on which we ran the
+        program remaining in the cache, and likely more and more of the image
+        was kept in the cache from test to test as it was recognized that it
+        was needed repeatedly.
+
+        Because the majority (if not all of) the image was likely stored in the
+        cache when the program ran at its fastest, the order of efficiency is
+        largely determined by indexing complexity.
+        Because row-major access and col-major access have very similar
+        indexing, their run-times were relatively similar, whereas block-major
+        access has two levels of indexing of the same complexity as row-major
+        access, so it's run-time was significantly longer. Essentially,
+        block-major access has to first index a block and load it before it
+        then indexes an individual element in that block and loads that,
+        whereas row-major and column-major both index directly to the element to
+        be loaded.
+        Row-major is slightly faster than column-major access because the
+        following element to be accessed will be directly after it's preceding
+        element in the cache, so the program just has to follow the memory in
+        order rather than finding elements at varying locations in the cache. 
+        
+
+Time spent completing assignment: 50 hours

@@ -1,0 +1,38 @@
+#ifndef UARRAY2_INCLUDED
+#define UARRAY2_INCLUDED
+
+#define T UArray2_T
+typedef struct T *T;
+
+// _new & _free
+extern T    UArray2_new(int width, int height, int size);
+extern void UArray2_free(T *array);
+
+// _width, _height, _size
+extern int  UArray2_width(T array);
+extern int  UArray2_height(T array);
+extern int  UArray2_size(T array);
+
+// _at
+void *UArray2_at(T array, int row, int col);
+
+// _resize, _copy
+extern void UArray2_resize(T array, int new_row, int new_col);
+extern T    UArray2_copy(T array);
+
+// map_row_major, map_col_major
+/* 
+extern void UArray2_map_row_major(T array,
+            void apply(const void *element, void *cl), void *cl);
+extern void UArray2_map_col_major(T array,
+            void apply(const void *element, void *cl), void *cl);
+*/
+extern void UArray2_map_row_major(T array,
+            void apply(int row, int col, UArray2_T array, void *p1, void *p2),
+            void *cl);
+extern void UArray2_map_col_major(T array,
+            void apply(int row, int col, UArray2_T array, void *p1, void *p2),
+            void *cl);
+
+#undef T
+#endif

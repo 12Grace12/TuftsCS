@@ -1,0 +1,275 @@
+;;
+;; Problem 3
+;;
+;; given integers m & n, sigma calculates the sum of all numbers from  m to n
+(define sigma (m n)
+    (if (> m n) 
+        0
+        (+ m (sigma (+ m 1) n))
+    ) 
+)
+;; breaks down inputs into two cases:
+;;     invalid (m > n) (base case or invalid case)
+;;     valid (m <= n) (recurses)
+(check-expect (sigma 1 4) 10) ; standard check (m < n)
+(check-expect (sigma 5 5) 5)  ; for m = n, sum should be m
+(check-expect (sigma 6 4) 0)  ; for m > n, sum should be 0
+
+
+;;
+;; Problem 4
+;;
+;; given integers m & n, exp calculates the value of m^n 
+;; m & n must both be greater or equal to 0, otherwise fxn returns -1
+(define exp (m n)
+    (if (or (< m 0) (< n 0))
+        -1
+        (if (<= n 0)
+            1
+            (* m (exp m (- n 1)))
+        )
+    )
+)
+;; breaks down inputs into two cases:
+;;     invalid (m & n < 0)
+;;     valid (m & n >= 0)
+;;         then breaks valid into two more cases:
+;;             n > 0  (recurse)
+;;             n <= 0 (basecase) 
+(check-expect (exp 3 3) 27) ; standard check (m & n > 0)
+(check-expect (exp 91 0) 1) ; when n = 0
+(check-expect (exp 0 3)  0) ; when m = 0
+
+
+;; given integers m & n, log returns smallest integer l such that m^(l+1) > n
+;; m must be greater than 0 and n must be greater than 0; otherwise returns 0
+(define log (m n)
+    (if (or (<= m 1) (<= n 0))
+        0
+        (if (< n m)
+            0
+            (+ 1 (log m (/ n m)))
+        )
+    )
+)
+;; breaks down input into two cases:
+;;    invalid (m <= 1, n <= 0)
+;;    valid (m > 1, n > 0)
+;;        then breaks into:
+;;            base case (m > n)
+;;            continue recursion (m <= n)
+(check-expect (log 4 18) 2) ; standard check (0 < m < n)
+(check-expect (log 4 1) 0)  ; n < m
+
+
+;;
+;; Problem 5
+;;
+;; given integers n & k, choose returns number of ways to choose k-items from n-items 
+;; n & k must both be non-negative
+(define choose (n k)
+    (if (= k 0)
+        1
+        (if (= n k)
+            1
+            (+ (choose (- n 1) k) (choose (- n 1) (- k 1)))
+        )
+    )
+)
+;; breaks down input into:
+;;    k = 0, returns 1
+;;    k = n, returns 1
+;;    else (n != k != 0), recurses
+(check-expect (choose 5 0) 1)  ; exception case (k = 0)
+(check-expect (choose 3 3) 1)  ; exception case (k = n)
+(check-expect (choose 5 3) 10) ; standard case
+
+;;
+;; Problem 6
+;;
+;; given integer m, returns the mth fibonacci number
+;; m must be non-negative
+(define fib (m)
+    (if (= m 0)
+        0
+        (if (= m 1)
+            1
+            (+ (fib (- m 1)) (fib (- m 2)))
+        )
+    )
+)
+;; breaks down input into:
+;;    m = 0, returns 0
+;;    m = 1, returns 1
+;;    m > 1, recurses
+(check-expect (fib 0) 0) ; exception / basecase (m = 0)
+(check-expect (fib 1) 1) ; exception / basecase (m = 1)
+(check-expect (fib 6) 8) ; standard case
+
+;;
+;; Problem 7
+;;
+;; given integers n & i, returns 1 if n is prime or 0 if i is factor of n   
+(define prime-or-factor? (n i)
+    (if (or (= n 2) (< i 2))
+        1
+        (if (= 0 (mod n i))
+            0
+            (prime-or-factor? n (- i 1))
+        )
+    )
+)
+;; breaks down input into:
+;;    n = 2 or i < 2, n is prime (base case)
+;;    n % i = 0, i is factor of n (base case)
+;;    else, recurse
+
+;; given integer n greater than 1, returns if n is prime
+(define prime? (n)
+    (prime-or-factor? n (- n 1))    
+)
+(check-expect (prime? 4) 0) ; standard case (nonprime)
+(check-expect (prime? 7) 1) ; standard case (prime)
+(check-expect (prime? 7919) 1) ; large prime
+
+;; given integer n (>= 0) & x (> 1), returns the nth prime greater than x
+(define nthprime-greater-than (n x)
+    (if (prime? (+ x 1))
+        (if (= n 1)
+            (+ x 1)
+            (nthprime-greater-than (- n 1) (+ x 1))
+        )
+        (nthprime-greater-than n (+ x 1))
+    )
+)
+;; breaks down input into:
+;;    x + 1 isn't prime
+;;    x + 1 is prime and n != 1
+;;    x + 1 is prime and n == 1
+
+;; given integer n (>= 0), returns the nth prime number
+(define nthprime (n)
+    (nthprime-greater-than n 1)
+)
+(check-expect (nthprime 9) 23) ; standard case
+(check-expect (nthprime 50) 229) ; large case 
+
+;; given integer n (>= 0), returns the sum of the first n primes
+(define sumprimes (n)
+    (if (= n 0)
+        0
+        (+ (nthprime n) (sumprimes (- n 1)))
+    )
+)
+;; breaks down input into:
+;;    n == 0
+;;    n != 0
+(check-expect (sumprimes 5) 28) ; standard case
+(check-expect (sumprimes 20) 639) ; large case
+
+;; given integers m (>= 0),  n (>= 0),  & i (>= 0), determines m & n share a factor i or if m & n are relative primes
+(define relprime-or-share-factor? (m n i)
+    (if (= i 1)
+        1
+        (if (and (= 0 (mod m i)) (= 0 (mod n i)))
+            0
+            (relprime-or-share-factor? m n (- i 1))
+        )
+    )
+)
+;; breaks down input into:
+;;    i = 1 (basecase)
+;;    m & n share factor i (basecase)
+;;    else (recurse)
+
+;; given integers m & n, determines if m & n are relative primes
+(define relprime? (m n)
+    (if (or (< m 0) (< n 0))
+        0
+        (relprime-or-share-factor? m n (- n 1))
+    )
+)
+;; breaks down input into:
+;;    m < 0  & n < 0
+;;    m >= 0 & n >= 0
+(check-expect (relprime? 9 10) 1) ; standard case
+(check-expect (relprime? -3 2) 0) ; negative case
+
+
+;;
+;; Problem 8
+;;
+;; given a positive integer n, determines if n is composed of all fours
+(define given-positive-all-fours? (n)
+    (if (= n 4)
+        1
+        (if (or (!= 0 (mod n 4)) (= 0 (mod n 10)))
+            0
+            (given-positive-all-fours? (/ n 10))
+        )
+    )
+)
+;; breaks down input into:
+;;    n = 4 (basecase)
+;;    n is divisible by four and not single digit 
+;;    n is not divisible by four or single digit (basecase)
+(check-expect (given-positive-all-fours? 4444) 1) ; standard case
+(check-expect (given-positive-all-fours? 4434) 0) ; standard case
+
+;; given an integer n, determines if n is composed of all digits four
+;; if n is negative, it is determined to not contain ALL fours
+(define all-fours? (n)
+    (if (= n 4)
+        1
+        (if (or (or (!= 0 (mod n 4)) (= 0 (mod n 10))) (< n 0))
+            0
+            (given-positive-all-fours? (/ n 10))
+        )
+    ) 
+)
+;; breaks down input into:
+;;    n = 4
+;;    n is positive, divisible by 4, and not single digit
+;;    n is negative, not divisible by 4, or single digit
+(check-expect (all-fours? -4) 0) ; negative should be false
+(check-expect (all-fours? 34) 0) ; standard fail case
+(check-expect (all-fours? 444) 1); standard pass case
+
+;; given an integer n, determines if n is composed of all the same digit
+(define all-one-digit? (n)
+    (if (= n (mod n 10))
+        1
+        (if (!= (mod (/ n 10) 10) (mod n 10))
+            0
+            (all-one-digit? (/ n 10))
+        )
+    )
+)
+;; breaks down input into:
+;;    n is single digit (basecase)
+;;    n's 1-place and n's 10-place are same digit
+;;    n's 1-place and n's 10-place are not same (basecase)
+(check-expect (all-one-digit? 999) 1) ; standard case
+(check-expect (all-one-digit? 434) 0) ; standard fail case
+(check-expect (all-one-digit? -88) 1) ; negative case (should pass)
+
+;; given an integer n, determines if n's digits are strictly increasing
+(define increasing-digits? (n)
+    (begin
+        (if (>= n 0) n (set n (* n -1))) ; set n to absolute val of n
+        (if (= n (mod n 10))
+            1
+            (if (>= (mod (/ n 10) 10) (mod n 10))
+                0
+                (increasing-digits? (/ n 10))
+            )
+        )
+    )
+)
+;; breaks down input into:
+;;    n is single digit (basecase)
+;;    n's 1-place is greater than n's 10-place
+;;    n's 1-place is not greater than n's 10-place (basecase)
+(check-expect (increasing-digits? 123) 1)  ; standard case
+(check-expect (increasing-digits? 1243) 0) ; standard case 
+(check-expect (increasing-digits? -489) 1) ; negative case (true)

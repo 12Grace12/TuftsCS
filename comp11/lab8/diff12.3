@@ -1,0 +1,98 @@
+1,97d0
+< Setting quantity of all 10 items to 6
+< Transaction 0: remove(1,1) returns T
+<   Current Warehouse Inventory
+<   PROD:    0   1   2   3   4   5   6   7   8   9
+<    QTY:    6   5   6   6   6   6   6   6   6   6
+< 
+< 
+< Transaction 1: remove(8,1) returns T
+<   Current Warehouse Inventory
+<   PROD:    0   1   2   3   4   5   6   7   8   9
+<    QTY:    6   5   6   6   6   6   6   6   5   6
+< 
+< 
+< Transaction 2: remove(2,1) returns T
+<   Current Warehouse Inventory
+<   PROD:    0   1   2   3   4   5   6   7   8   9
+<    QTY:    6   5   5   6   6   6   6   6   5   6
+< 
+< 
+< Transaction 3: remove(0,0) returns T
+<   Current Warehouse Inventory
+<   PROD:    0   1   2   3   4   5   6   7   8   9
+<    QTY:    6   5   5   6   6   6   6   6   5   6
+< 
+< 
+< Transaction 4: remove(8,3) returns T
+<   Current Warehouse Inventory
+<   PROD:    0   1   2   3   4   5   6   7   8   9
+<    QTY:    6   5   5   6   6   6   6   6   2   6
+< 
+< 
+< Transaction 5: running_low(4) returns 1
+<    product 8 : 2
+< 
+<   Current Warehouse Inventory
+<   PROD:    0   1   2   3   4   5   6   7   8   9
+<    QTY:    6   5   5   6   6   6   6   6   2   6
+< 
+< 
+< Transaction 6: running_low(3) returns 1
+<    product 8 : 2
+< 
+<   Current Warehouse Inventory
+<   PROD:    0   1   2   3   4   5   6   7   8   9
+<    QTY:    6   5   5   6   6   6   6   6   2   6
+< 
+< 
+< Transaction 7: remove(-2,0) returns F
+<   Current Warehouse Inventory
+<   PROD:    0   1   2   3   4   5   6   7   8   9
+<    QTY:    6   5   5   6   6   6   6   6   2   6
+< 
+< 
+< Transaction 8: is_instock(9) returns T
+<   Current Warehouse Inventory
+<   PROD:    0   1   2   3   4   5   6   7   8   9
+<    QTY:    6   5   5   6   6   6   6   6   2   6
+< 
+< 
+< Transaction 9: remove(-1,2) returns F
+<   Current Warehouse Inventory
+<   PROD:    0   1   2   3   4   5   6   7   8   9
+<    QTY:    6   5   5   6   6   6   6   6   2   6
+< 
+< 
+< Transaction 10: running_low(3) returns 1
+<    product 8 : 2
+< 
+<   Current Warehouse Inventory
+<   PROD:    0   1   2   3   4   5   6   7   8   9
+<    QTY:    6   5   5   6   6   6   6   6   2   6
+< 
+< 
+< Transaction 11: remove(-1,2) returns F
+<   Current Warehouse Inventory
+<   PROD:    0   1   2   3   4   5   6   7   8   9
+<    QTY:    6   5   5   6   6   6   6   6   2   6
+< 
+< 
+< Transaction 12: remove(3,0) returns T
+<   Current Warehouse Inventory
+<   PROD:    0   1   2   3   4   5   6   7   8   9
+<    QTY:    6   5   5   6   6   6   6   6   2   6
+< 
+< 
+< Transaction 13: remove(9,0) returns T
+<   Current Warehouse Inventory
+<   PROD:    0   1   2   3   4   5   6   7   8   9
+<    QTY:    6   5   5   6   6   6   6   6   2   6
+< 
+< 
+< Transaction 14: remove(7,3) returns T
+<   Current Warehouse Inventory
+<   PROD:    0   1   2   3   4   5   6   7   8   9
+<    QTY:    6   5   5   6   6   6   6   3   2   6
+< 
+< 

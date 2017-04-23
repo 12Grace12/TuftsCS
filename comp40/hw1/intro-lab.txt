@@ -1,0 +1,73 @@
+               COMP 40 Lab: Naming brightness functions
+                             (for pairs)
+
+
+Partner's:
+
+Partner 1:  Name: Ben Tanen       Login: btanen01
+
+Partner 2:  Name: Feiyu Lu        Login: flu01
+
+Partner 3:  Name______________    Login ____________ (if any)
+
+
+This file goes with part 8 of the first lab.  The idea is to give you
+some practice thinking about the names of functions.  The problem is a
+simple one, so we're going the software equivalent of shooting a fly
+with an elephant gun, but because the problem is so simple, it makes
+it easy to have a short practice session.
+
+Here is the problem:
+
+  - Suggest three different functions that might be useful in
+    implementing `brightness`.
+
+  - For each function, suggest three possible names.
+
+  - For each function, say which name you think is most appropriate
+    and *why*.
+
+
+
+Function #1:
+
+  Job: Get information from the header file of our .pnm file
+
+  Candidate names: getInfo(), getHeaderInfo(), headInfo()
+
+  Best name: getHeaderInfo()
+
+  Why the given name is the best: it is clear that this function is getting
+  information from the header. This is better than headInfo() because this
+  isn't clear what it is doing with headInfo(). It is also better than
+  getInfo() because it is not clear what info getInfo would get.
+
+
+Function #2:
+
+  Job: Calculate average of a set of numbers
+
+  Candidate names: calcAverage(), average(), avg_fxn() 
+
+  Best name: calcAverage()
+
+  Why the given name is the best: Like function #1, calcAverage() is the most
+  clear about what the function is actually doing and ultimately returning.
+  While average() is not terrible, calcAverage() is slightly more clear. 
+  avg_fxn() is just a poor name because it is redundant and unclear.
+
+
+Function #3:
+
+  Job: Get the brightness of a particular pixel
+
+  Candidate names: getPxlBrightness(), brightness(), pixel() 
+
+  Best name: getPxlBrightness()
+
+  Why the given name is the best: Like the previous 2 function names, 
+  getPxlBrightness() is the most clear about the fact that it is getting the
+  brightness information from a particular pixel. brightness() is close but
+  isn't clear about getting the information from a pixel and pixel() is bad
+  because it does not specify what it is doing with a pixel.
+

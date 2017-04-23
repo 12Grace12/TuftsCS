@@ -1,0 +1,119 @@
+                COMP 40 Lab: Unboxed and 2D Arrays
+
+
++--------------------------------------------------------+
+|Keeper of the record: Ben Tanen                         |
+|--------------------------------------------------------|
+| Other group member(s): McKenzie Welter                 |
+|                                                        |
+|                                                        |
+|                                                        |
++--------------------------------------------------------+
+
+
+PART 1: BOXED AND UNBOXED ARRAYS
+--------------------------------
+
+You are about to design the interface and implementation for a
+collection data type, I.e. an ADT like Hanson's, and you are
+considering the tradeoffs between using a boxed or an unboxed
+interface for values that users store in your collection.
+
+1A: Briefly define the terms "boxed" and "unboxed" as used for these
+    interfaces (I.e. help us be sure you know which is which!):
+
+    In a boxed data structure, the content that is being stored is just
+    a pointer to the actual data that you are using.
+
+    In an unboxed data structure, instead of a pointer being stored, the
+    actual data is being stored in the individual elements of the structure.
+
+1B: List two (or more) advantages of the boxed representation.
+
+    An advantage of using a boxed representation is that when you are using
+    the actual data structure, you only need to know the size of the data
+    elements that you will be using. This is advantageous because it allows
+    for more modularity in your design.
+
+    Another advantage is that, because boxed representations store pointers,
+    they are more likely to be smaller data structures which are efficient to
+    use.
+
+1C: List two (or more) advantages of an unboxed representation.
+
+    One advantage of using an unboxed representation is that you will not be
+    working with pointers. While pointers are generally quite useful, by
+    working on the actual data elements themselves, there is a certainty that
+    the changes you are making are directly occurring to your elements.
+
+    Another advantage is that you can be certain that the data elements you
+    are adding to the unboxed array actually exist (are non-NULL). In a boxed
+    array it is possible to pass a pointer that is NULL and the data structure
+    would have no idea. This is not possible in unboxed structures which makes
+    it safer.
+
+1D: Look at the interface to UArray (the pointer to an interface
+    summary is in the lab instructions). Discuss the methods that show
+    the use of the unboxed style. Why, for example, does UArray_new
+    take both a number of elements and an element size? 
+
+    The fact that UArray_new requests both the number of elements and the size
+    of these elements shows that UArray uses an unboxed representation. This
+    becomes obvious because it must know the size of the elements when it is
+    allocating the necessary space for the array. If it were a boxed structure
+    the initializing function would not need to know the exact size of the
+    elements that will be stored. The specifics of this can be seen in the
+    implementation of UArrayRep_init().
+
+PART 2: 2D Arrays from 1D Arrays
+--------------------------------
+
+2A. One way to construct a 2D array is to use multiple 1D
+    arrays. Describe briefly how you would do this. For example, if
+    the user asked you to create a 7x5 array of values, how many
+    one-dimensional arrays would you create? If the user asked to
+    store a value in cell [3,6] where would it go?
+
+    If we wanted to make a 7x5 2D array, we would need to use 8 1D arrays.
+    The first array would be of length 7 and would be our main array. Each of
+    its elements would point to a subarray of length 5. This would then make a
+    7x5 array.
+
+    If we were trying to add an element to cell [6,3], we would go to the 3rd
+    element of the main array (which would be a 1D array) and access its 6th
+    element. However, if we were trying to add an element to [3,6] (outside
+    the scope of our 2D array), we would throw an error telling the user of
+    their mistake. 
+
+2B. Another approach is to use a single one-dimensional array and to
+    put all the elements of the 2D array into that. Again, assuming
+    that you are to create a 7x5 2D array, give a mathematical formula
+    for the index in the 1D array where a value [x,y], would go in the
+    1D array.
+
+    If you wanted to represent the 2D array using one 1D array, you would need
+    an array of length 35 (length x width). To then access the individual
+    elements of this array, you would need to use a formula. An example
+    formula might be f(x) = 7x + y (length x and width y).
+
+PART 3: Designing the UArray2 Interface
+---------------------------------------
+
+3A. Describe three (or more) things you learned about the design and semantics
+    of the UArray2 interface that you learned from reading useuarray2.c
+    and from running correct_useuarray2.
+
+    From reading the useuarray2.c code, we can see that the UArray2 interface
+    includes different functions to return the size, width, and height of the
+    specific 2D UArray.
+
+    We can also see that the function UArray2_at(array, x, y) will return the
+    element of array at coordinate [x,y].
+
+    Additionally, we see that UArray2 includes two mapping functions (both
+    column and row) that take a specified function pointer to map the elements. 
+
+    Finally we can see that from useuarray2.c that if at any point an array
+    fails a particular test or mapping, an error message will be displayed
+    telling the user that the array was not OK!_______!
+

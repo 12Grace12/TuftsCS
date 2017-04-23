@@ -1,0 +1,91 @@
+# Assignment #4: Arith (2/25/15)
+# Ben Tanen, Julia Moyer
+# Compile Script
+
+#!/bin/sh
+
+set -e    # halt on first error
+
+link=all  # link all binaries by default
+linked=no # track whether we linked
+
+case $1 in  
+  -nolink) link=none ; shift ;;  # don't link
+  -link)   link="$2" ; shift ; shift ;;  # link only one binary
+esac
+
+# compile and link against CII40
+CIIFLAGS=`pkg-config --cflags cii40`
+CIILIBS=`pkg-config --libs cii40`
+
+# compile and link against course software and netpbm library
+CFLAGS="-I. -I/comp/40/include $CIIFLAGS"
+LIBS="$CIILIBS -l40locality -lnetpbm -lm"
+LFLAGS="-L/comp/40/lib64 -larith40"
+
+# these flags max out warnings and debug info
+FLAGS="-g -O0 -Wall -Wextra -Werror -Wfatal-errors -std=c99 -pedantic"
+
+rm -f *.o  # make sure no object files are left hanging around
+
+case $# in
+  0) set *.c ;; # if no args are given, compile all .c files
+esac
+
+# compile each argument to a .o file
+for cfile 
+do
+  gcc $FLAGS $CFLAGS -c $cfile
+done
+
+########### the middle part is different for each assignment
+# link together .o files + libraries to make executable binaries
+# using one case statement per executable binary
+
+# Written by Ben Tanen and Julia Moyer
+case $link in
+  all|40image) gcc $FLAGS -o 40image-6 uarray2.o uarray2b.o \
+                    a2blocked.o \
+                    40image.o compress40.o \
+                    bitpack.o rgb_component_conversion.o \
+                    discrete_cosine.o ppm_compression_io.o \
+                  $LIBS $LFLAGS 
+              linked=yes ;;
+esac
+
+# the below four cases are used for testing the individual modules used
+case $link in
+  all|rgb_comp) gcc $FLAGS -o rgb_component rgb_comp_main.o \
+                    rgb_component_conversion.o \
+                  $LIBS $LFLAGS 
+              linked=yes ;;
+esac
+
+case $link in
+  all|discr_cos) gcc $FLAGS -o discrete_cosine discrete_cosine_main.o \
+                    discrete_cosine.o \
+                  $LIBS $LFLAGS 
+              linked=yes ;;
+esac
+
+case $link in
+  all|ppm_io) gcc $FLAGS -o ppm_compression_io ppm_compression_io_main.o \
+                    ppm_compression_io.o uarray2b.o uarray2.o bitpack.o \
+                  $LIBS $LFLAGS 
+              linked=yes ;;
+esac
+
+case $link in
+  all|bitpack) gcc $FLAGS -o bitpack bitpack_main.o \
+                    bitpack.o \
+                  $LIBS $LFLAGS 
+              linked=yes ;;
+esac
+
+# error if asked to link something we didn't recognize
+if [ $linked = no ]; then
+  case $link in  # if the -link option makes no sense, complain 
+    none) ;; # OK, do nothing
+    *) echo "`basename $0`: don't know how to link $link" 1>&2 ; exit 1 ;;
+  esac
+fi

@@ -1,0 +1,31 @@
+# Comp 40 Assignment 9 : ASM Coding
+## Ben Tanen (btanen01) & McKenzie Welter (mwelte01)
+
+Collaboration and Assistance    : thanks TA's :) especially Peter Lee, who is
+                                  so awesome and chill and elderly. Dan Kane,
+                                  you're beard let us down this time.
+
+Everything is correctly implemented according to specifications.
+
+Departures from recommended calling conventions :
+        - r0 was used as the constant zero register, as recommended
+        - r1 was, on occasion, used to hold the return address, as recommended.
+          However, it was also used as a general purpose register and briefly
+          as a temporary register.
+        - r2 was used as the stack pointer (the value stack), as recommended
+        - r3 and r4 were used as volatile general purpose registers, as
+          opposed to the recommended nonvolatile registers.
+        - r5 was used as a volatile general purpose register as recommended.
+        - r6 and r7 were used as temporary registers as recommended
+
+Print Module Implentation :
+        The print module was implemented by popping numbers off the value stack,
+        pushing those values onto another stack for safekeeping, and extracting
+        and printing the individual digits using modulos of increasing powers of
+        ten.
+
+Time Spent Analyzing the Assignment : 5 hours
+
+Time Spent Writing Assembly Code    : 4 hours
+
+Time Spent Debugging the Calculator : 3 hours

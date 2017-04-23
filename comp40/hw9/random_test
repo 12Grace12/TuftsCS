@@ -1,0 +1,5 @@
+random-calc40 1000000 > test_file.txt
+calc40 < test_file.txt > output1.txt
+./um rpn.um < test_file.txt > output2.txt
+diff output1.txt output2.txt
+

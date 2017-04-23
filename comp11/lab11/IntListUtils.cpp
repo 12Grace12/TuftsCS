@@ -1,0 +1,106 @@
+/***********************************************************************/
+/*                          IntList Utilities                          */
+/***********************************************************************/
+
+#include <iostream>
+
+using std::cout;
+
+#include "IntList.h"
+
+
+/*
+ * Can use a while or for loop. 
+ */
+void print(IntList list)
+{
+	IntList LL = list;
+	cout << "[";
+	while (!isEmpty(LL)){
+	  cout << first(LL);
+	  LL = deleteFirst(LL);
+	  if (!isEmpty(LL)){
+	    cout << ", ";
+	  }
+	}
+	cout << "]";
+}
+
+// 	4 ~> 3 ~> ()
+void printArtistically(IntList list)
+{
+	IntList LL = list;
+	while (!isEmpty(LL)){
+	  cout << first(LL);
+	  LL = deleteFirst(LL);
+	  if (!isEmpty(LL)){
+	    cout << " ~> ";
+	  }
+	}
+}
+
+int sumList(IntList list)
+{
+	int sum = 0;
+	IntList LL = list;
+	while (!isEmpty(LL)){
+	  sum += first(LL);
+	  LL = deleteFirst(LL);
+	}
+	return sum;
+}
+
+int length(IntList list)
+{
+	int num_elem = 0;
+	IntList LL = list;
+	
+	while (!isEmpty(LL)){
+	  num_elem++;
+	  LL = deleteFirst(LL);
+	}
+	return num_elem;
+}
+
+IntList copy(IntList list)
+{
+	IntList LL = list;
+	return LL;
+}
+
+IntList mapIncrement(IntList list)
+{
+	// STUB
+	return empty();
+}
+
+IntList mapIncrementBy(IntList list, int increment)
+{
+	// STUB
+	return empty();
+}
+
+IntList sum(IntList list1, IntList list2)
+{
+	// STUB
+	return empty();
+}
+
+IntList filterPositive(IntList list)
+{
+	// STUB
+	return empty();
+}
+
+IntList range(int lo, int hi)
+{
+	IntList LL;
+	for (int x=hi;x<=lo;x--){
+	  prepend(x, LL);
+	}
+}
+
+void deleteList(IntList *p_list)
+{
+	// STUB
+}

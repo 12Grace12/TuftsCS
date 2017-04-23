@@ -1,0 +1,209 @@
+Universal Machine Design, COMP40 HW #6
+Rebecca Larson, Ben Tanen
+
+Below are the design checklists for two interfaces that we will be designing
+for the UM program. The purpose of this program is to emulate a universal
+machine. This is run through the UM ADT / interface and relies on segments
+of memory for its memory storage. Running this process through a main file is
+done by calling the functions to create a new UM, read the program into the UM,
+run the program, and free all the memory used by the UM (that's all). For more 
+about these interfaces, see the design checklists below.
+
+Design Checklist for Segmented Memory:
+
+1. The abstract thing we are trying to represent is a memory segment that 
+   stores 32-bit words. Words can be accessed in the segment similar to 
+   elements in an array. 
+  
+2. The following functions will be used to manipulate the memory segments:
+
+   Seg_T Seg_new(int length, uint32_t segID) - creates a new segment of 
+            given length and ID and returns the segment with all of the 
+            words initialized to zero
+   uint32_t seg_get_word(seg_t segment, unsigned index) - given a segment 
+            and index within it, returns word at that index
+   void seg_put_word(seg_t segment, unsigned index, uint32_t word) - puts
+            given word in the given segment at the specified index
+   int seg_length(seg_t segment) - returns the length of the segment (which
+            is the number of words in segment)
+   uint32_t seg_ID(seg_t segment) - returns the segment ID
+   bool seg_map(seg_t segment, int length) - changes boolean mapped to true
+            and adjusts the array of words to be the given length, initializes 
+            all words to zero, returns true if successful and false if not
+   void seg_unmap(seg_t segment) - changes boolean mapped to false
+   bool seg_is_mapped(seg_t segment) - returns true if the segment has been
+            mapped and false if it has not been mapped
+   void seg_free(seg_t *segment) - frees all allocated memory for the 
+            segment
+
+3. This is an example case of the above functions:
+   seg_t segment = seg_new(4, segID); // create new segment with 4 words
+   seg_put_word(segment, 0, word); // puts word at index 0 of segment
+   uint32_t current_word = seg_get_word(segment, 0); // gets word
+   if(seg_is_mapped(segment)) ... // checks if mapped
+   seg_free(&segment) // free allocated segment 
+
+4. Our representation of a memory segment will be held in an abstract data type
+   that the user can't access. Behind the scenes, a memory segment is a struct 
+   that contains a boolean that says if it is mapped, an integer of its length,
+   a uint32_t of its segment ID, and an array of data that will contain its 
+   words (uint32_t). With this representation, we will maintain that the user 
+   must use the functions above to interact with the segments to maintain the 
+   memory segment invariants. 
+   These invariants will include:
+        - when a segment is newly mapped or created, all of its words will be
+          equal to zero
+        - a segment will always be either mapped or unmapped
+        - the length of a segment will be constant while it is mapped (but can
+          be changed if the segment is unmapped)
+
+6. Our test cases will test each of the functions described above and how they
+   interact together. They will include (and all first use seg_new and end with
+   seg_free):
+        - testing seg_put_word and seg_get_word together 
+        - testing unmapping and mapping the same segment repeatedly
+        - testing trying to map an already mapped segment
+        - testing getting properties of the segment (ie length and segID) 
+          before and after changing the segment through mapping
+
+7. We will use the following programming idioms:
+        - the idiom for allocating and initializing pointers to structures
+        - the idioms for creating, manipulating, and freeing an abstract type 
+          using incomplete structures
+
+Design Checklist for UM:
+1. We are trying to emulate a 14 instruction-set universal machine using C and 
+   memory segments. 
+
+2. We will use custom-built machine code inputs to represent a program that
+   the universal machine will interpret and emulate. Programs will be written as
+   32-bit words that represent the 14 possible machine instructions.
+
+3. The outputs will be the emulated results that the input program is intended
+   to output. This could include properly functioning programs or programs that 
+   will fail.
+
+4. 
+        a. The first problem will be reading the custom-built machine code 
+           inputs and storing them in memory.
+        b. The next step will be interpreting each machine instruction and
+           determining what the program is intending to achieve. 
+        c. The next step will be executing the interpreted instruction as 
+           defined by the UM documentation. This process will be repeated for
+           each of the input instructions unless program halt is called or the
+           UM fails.
+
+5. 
+        a. This data will be series of words from the program input. These words
+           are the instructions and stored as unsigned 32-bit integers.
+        b. This data will include the inputted word that is being interpreted.
+        c. The data from the previously interpreted word and the necessary 
+           memory segment to execute the instruction in the word.
+
+6. The provided Bitpack library will be used to interpret the inputted words of
+   steps b and c.
+
+7. There will be custom-built modules to help solve each part of this problem.
+   One module will be the UM, which will contain all necessary functions for 
+   the UM to operate. A second module will be used to maniuplate the memory
+   segments. 
+
+8. The first module is the UM module, which is defined by this design 
+   checklist. The second module is defined by the previous checklist
+   in this document.
+
+9. There are a few invariants that will hold for the solution:
+        - any word being used is 32 bits
+        - while the program is being emulated, the program counter will
+          always be pointing at an instruction in segment 0
+        - segment 0 will always hold the program instructions to be executed
+        - the opcode will always be between 0 and 13 inclusive, otherwise the
+          UM will fail
+
+11. The first major component will be the UM interface. This interface will 
+    include the UM abstract data type, which will hold all of its necessary
+    data. The interface will also include the functions to access this data
+    initialize and close the UM upon completion. The UM will be an ADT that
+    holds 8 registers, a Hanson Sequence of memory segments, and a 32-bit
+    program counter. The UM interface will also use an additional set of
+    functions in the UM Instruction module. This will contain the functions for
+    the 14 instructions defined by the UM documentation.
+    
+    UM Interface:
+
+    UM UM_new(UM_T UM) - returns an initialized UM that meets the specifications
+                     of the UM initial state
+    void UM_read_program(UM_T UM) - reads in the series of input word 
+                     instructions and stores them in segment 0
+    void UM_run_program(UM_T UM) - once a the program is read in, this runs
+                     the instructions in segment 0 until the UM reaches halt()
+                     or fails
+    uint32_t UM_get_segment_word(UM_T UM, uint32_t segID, unsigned offset)
+                     gets and returns the word corresponding to the given 
+                     segID and offset
+    void UM_set_segment_word(UM_T UM, uint32_t segID, unsigned offset, 
+                             uint32_t word) - sets the word corresponding to 
+                             the given segment ID and offset
+                             to the given word value 
+    uint32_t UM_map_segment(UM_T UM, unsigned numWords) - creates a memory 
+                     segment of given length and returns segment ID
+    void UM_unmap_segment(UM_T UM, uint32_t segID) - unmaps the segment of given
+                                                     segID
+    uint32_t UM_get_register(UM_T UM, unsigned register) - returns the value 
+                                                           contained in given 
+                                                           register
+    void UM_set_register(UM_T UM, unsigned register, uint32_t word) - sets the 
+                     value of
+                     given register to given word
+    void UM_free(UM_T *UM) - frees all allocated memory of UM for when 
+                             computation hasended
+
+   UM Instruction Function Set:
+
+        void conditional_move(UM_T UM, int rA, int rB, int rC);
+        void segmented_load(UM_T UM, int rA, int rB, int rC);
+        void segmented_store(UM_T UM, int rA, int rB, int rC);
+        void addition(UM_T UM, int rA, int rB, int rC);
+        void multiplication(UM_T UM, int rA, int rB, int rC);
+        void division(UM_T UM, int rA, int rB, int rC);
+        void bitwise_NAND(UM_T UM, int rA, int rB, int rC);
+        void halt(UM_T UM, int rA, int rB, int rC);
+        void map_segment(UM_T UM, int rA, int rB, int rC);
+        void unmap_segment(UM_T UM, int rA, int rB, int rC);
+        void output(UM_T UM, int rA, int rB, int rC);
+        void input(UM_T UM, int rA, int rB, int rC);
+        void load_program(UM_T UM, int rA, int rB, int rC);
+        void load_value(UM_T UM, int rA, int value);
+
+   The above 14 functions obey the contracts described by the UM
+   documentation.
+
+12. The architecture of the UM program will consist of one UM that
+    holds 8 registers in an array of uint32_t words, a Hanson Sequence of 
+    memory segments (see other design checklist for more information), and
+    a uint32_t program counter that describes the current location of the 
+    running program. The UM will read in the given word instructions and use
+    its 14 commands to compute these instructions. These 14 commands interact
+    with the UM's registers and segments to complete the computation. 
+
+13. We will conduct the following test cases to ensure that the program works:
+       -  programs that will execute the 6 failure cases allowed within the 
+          documentation
+       -  programs that will test each of the 14 instructions of the UM 
+          individually
+       -  programs that will test combinations of the 14 instructions
+                -  all 14 in one program
+                -  repeatedly mapping and unmapping the same segment
+                -  random combinations that have no distinct meaning (but 
+                   shouldn't fail)
+                -  program that emulates a for loop
+
+14. In order to convince skeptical audiences, we would show them the results of
+    our many many tests above. We challenge them use our program correctly and
+    get an unexpected error.
+
+    Also the follow arguments:
+    - "Yo dude, we can run so many possible programs"
+    - "Man we totally map and unmap segments SUPER good"
+    - "Our commands are sick, any instruction that's not subtract, we do good"
+ 

@@ -1,0 +1,18 @@
+// initalize the value and print stacks and set pointer to 
+// vstack_bottom and pstack_top
+.section data
+        // initalize vstack to hold 10,000 32-bit words
+        // then set the bottom through the label
+        .space 10000
+        vstack_bottom:
+
+        // initalize pstack to hold 10,000 32-bit words
+        // then set the bottom through the label
+        .space 10000
+        pstack_bottom:
+
+// set main stack r2 to vstack_bottom
+// after this declaration, r2 is assumed to stay constant (as vstack_bottom) 
+.section init
+        r2 := vstack_bottom
+

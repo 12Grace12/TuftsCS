@@ -1,0 +1,32 @@
+#!/bin/sh
+#
+# compare one program to the output of the 'correct' one
+#
+# usage: run_test 
+#
+	if test $# -eq 2
+	then
+		P1=$1
+		P2=$2
+	else
+		P1=./wha
+		P2=./wha-correct
+	fi
+
+	printf "Enter a random number: "
+	read NUM
+
+	echo "Running $P1 $NUM "
+	./$P1 $NUM > out1.$NUM
+	echo "Running $P2 $NUM "
+	./$P2 $NUM > out2.$NUM
+	echo "Comparing output.."
+	if diff out1.$NUM out2.$NUM > diff12.$NUM
+	then
+		echo "No differences!"
+	else
+		echo "Output differs"
+		echo "Differences are: "
+		cat diff12.$NUM
+	fi
+

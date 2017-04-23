@@ -1,0 +1,34 @@
+UNBLACKEDGES
+
+Please put answers to questions here.
+
+  * What fraction of time is spent in I/O as compared with removing
+    black edges?
+
+    60.07% of the time is spent on the pbmwrite() and pbmread() functions
+    which are primarily IO functions.
+    The actual IO functions (read_raw_bit, putc) take 17.2% of the time.
+  
+  * How long does time ./unblackedges take?
+ 
+    Running ./unblackedges on the hyphen.png image takes 500ms.
+ 
+  * After making changes requested in the lab handout (steps 1-4), what
+    happened to the total time?
+ 
+    The total time decreased by 10ms from 500ms to 490ms.
+ 
+  * What happened to the fraction of time spent in Bit_put?
+
+    Initially, Bit_put took 8.69% of the running time.
+    With the improvements, it now takes 8.73% of the time. That is a 
+    -0.04% improvement.
+ 
+  * Since the implementation of Bit_put has not been improved, what has
+    changed?
+ 
+    There are fewer calls to remove_black_edges (because of the BFS approach)
+    which takes up less running time. This will ultimately increase the
+    fraction of time that is taken up by Bit_put because no improvement has
+    been made there (thus the increase).
+      

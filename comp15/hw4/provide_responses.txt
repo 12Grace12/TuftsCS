@@ -1,0 +1,1205 @@
+Preparing for testing...
+Checking Late user names...
+Checking Files...
+Making program via Makefile
+No errors!
+No warnings!
+********** Testing main1.cpp **********
+// Test: Inserts a single value to the tree and prints
+main1.cpp Passed!
+Running valgrind to check for memory leaks.
+No memory leaks!
+********** Done Testing main1.cpp **********
+
+********** Testing main2.cpp **********
+// Test: Inserts 4,5,6 into a tree and prints
+main2.cpp Passed!
+Running valgrind to check for memory leaks.
+No memory leaks!
+********** Done Testing main2.cpp **********
+
+********** Testing main3.cpp **********
+// Test: Inserts 5,4,6 into a tree and prints
+main3.cpp Passed!
+Running valgrind to check for memory leaks.
+No memory leaks!
+********** Done Testing main3.cpp **********
+
+********** Testing main4.cpp **********
+// Test: Inserts 5,4,6,6,5,4 into a tree and prints
+main4.cpp Passed!
+Running valgrind to check for memory leaks.
+No memory leaks!
+********** Done Testing main4.cpp **********
+
+********** Testing main5.cpp **********
+// Test: find_min(): Inserts 5,3,6,4,7,2 into a tree, prints tree and minimum
+main5.cpp Passed!
+Running valgrind to check for memory leaks.
+No memory leaks!
+********** Done Testing main5.cpp **********
+
+********** Testing main6.cpp **********
+// Test: find_max(): Inserts 5,3,6,4,7,2 into a tree, prints tree and maximum
+main6.cpp Passed!
+Running valgrind to check for memory leaks.
+No memory leaks!
+********** Done Testing main6.cpp **********
+
+********** Testing main7.cpp **********
+// Test: contains(): Inserts 5,3,6,4,7,2 into a tree, checks contains on -5-10
+main7.cpp Passed!
+Running valgrind to check for memory leaks.
+No memory leaks!
+********** Done Testing main7.cpp **********
+
+********** Testing main8.cpp **********
+// Test: max and min on empty tree: Creates empty tree, prints min/max.
+main8.cpp Passed!
+Running valgrind to check for memory leaks.
+No memory leaks!
+********** Done Testing main8.cpp **********
+
+********** Testing main9.cpp **********
+// Test: tree_height(): Inserts 5,3,8,4,6,2,7 into a tree, prints tree and height
+main9.cpp Passed!
+Running valgrind to check for memory leaks.
+No memory leaks!
+********** Done Testing main9.cpp **********
+
+********** Testing main10.cpp **********
+// Test: tree_height(): Prints height of empty tree (should be negative 1)
+main10.cpp Passed!
+Running valgrind to check for memory leaks.
+No memory leaks!
+********** Done Testing main10.cpp **********
+
+********** Testing main11.cpp **********
+// Test: find_min() on 100 random int tree (should be -99)
+main11.cpp Passed!
+Running valgrind to check for memory leaks.
+No memory leaks!
+********** Done Testing main11.cpp **********
+
+********** Testing main12.cpp **********
+// Test: find_max() on 100 random int tree (should be 100)
+main12.cpp Passed!
+Running valgrind to check for memory leaks.
+No memory leaks!
+********** Done Testing main12.cpp **********
+
+********** Testing main13.cpp **********
+// Test: node_count() of 100 random int tree (should be 71)
+main13.cpp Passed!
+Running valgrind to check for memory leaks.
+No memory leaks!
+********** Done Testing main13.cpp **********
+
+********** Testing main14.cpp **********
+// Test: count_total() of 100 random int tree (should be 295)
+main14.cpp Passed!
+Running valgrind to check for memory leaks.
+No memory leaks!
+********** Done Testing main14.cpp **********
+
+********** Testing main15.cpp **********
+// Test: count_total(): inserts 5,3,6,4 into tree, prints tree and count_total()
+main15.cpp Passed!
+Running valgrind to check for memory leaks.
+No memory leaks!
+********** Done Testing main15.cpp **********
+
+********** Testing main16.cpp **********
+// Test: count_total(): inserts 5,3,6,6,4,4 into tree, prints tree and count_total()
+main16.cpp Passed!
+Running valgrind to check for memory leaks.
+No memory leaks!
+********** Done Testing main16.cpp **********
+
+********** Testing main17.cpp **********
+// Test: remove childless node: inserts ten items prints tree, removes one
+main17.cpp Failed!
+//---------- test program code: main17.cpp ----------
+// Test: remove childless node: inserts ten items prints tree, removes one
+/*
+ * main17.cpp
+ *
+ *  Created on: Oct. 14, 2014
+ *      Author: chrisgregg
+ */
+#include <iostream>
+#include "BinarySearchTree.h"
+
+using namespace std;
+
+int main() {
+  int rand_ints[12]={5,3,6,11,-5,-2,15,4,4,9,14,8};
+
+  BinarySearchTree bst;
+  for (int i=0;i<12;i++) {
+    cout << "Inserting " << rand_ints[i] << "\n";
+    bst.insert(rand_ints[i]);
+  }
+  bst.print_tree();
+  cout << "Removing 8.\n";
+  bst.remove(8);
+  bst.print_tree();
+
+  return 0;
+}
+
+//---------- end test program code ----------
+
+//---------- Expected output for main17.cpp (first 6000 characters): 
+Inserting 5
+Inserting 3
+Inserting 6
+Inserting 11
+Inserting -5
+Inserting -2
+Inserting 15
+Inserting 4
+Inserting 4
+Inserting 9
+Inserting 14
+Inserting 8
+
+                _______________5______________
+               /                              \
+        _______3______                         6______
+       /              \                               \
+      -5__             4*                            __11__
+          \                                        /      \
+          -2                                      _9      15
+                                                 /       /   
+                                                 8      14    
+Removing 8.
+
+                _______________5______________
+               /                              \
+        _______3______                         6______
+       /              \                               \
+      -5__             4*                            __11__
+          \                                        /      \
+          -2                                       9      15
+                                                         /   
+                                                        14    
+//---------- End of expected output for main17.cpp.
+
+//---------- Your output for main17.cpp (first 6000 characters): 
+Inserting 5
+Inserting 3
+Inserting 6
+Inserting 11
+Inserting -5
+Inserting -2
+Inserting 15
+Inserting 4
+Inserting 4
+Inserting 9
+Inserting 14
+Inserting 8
+
+                _______________5______________
+               /                              \
+        _______3______                         6______
+       /              \                               \
+      -5__             4*                            __11__
+          \                                        /      \
+          -2                                      _9      15
+                                                 /       /   
+                                                 8      14    
+Removing 8.
+
+                _______________5______________
+               /                              \
+        _______3______                         6______
+       /              \                               \
+      -5__             4*                            __11__
+          \                                        /      \
+          -2                                      _9      15
+                                                 /       /   
+                                                 0      14    
+//---------- End of your output for main17.cpp.
+
+//---------- diff for main17.cpp (first 6000 characters): 
+31,33c31,33
+<           -2                                       9      15
+<                                                          /   
+<                                                         14    
+---
+>           -2                                      _9      15
+>                                                  /       /   
+>                                                  0      14    
+//---------- End of diff for main17.cpp.
+Running valgrind to check for memory leaks.
+No memory leaks!
+********** Done Testing main17.cpp **********
+
+********** Testing main18.cpp **********
+// Test: remove one-child node: inserts ten items prints tree, removes one
+main18.cpp Passed!
+Running valgrind to check for memory leaks.
+No memory leaks!
+********** Done Testing main18.cpp **********
+
+********** Testing main19.cpp **********
+// Test: remove two-child node: inserts ten items prints tree, removes one
+main19.cpp Passed!
+Running valgrind to check for memory leaks.
+No memory leaks!
+********** Done Testing main19.cpp **********
+
+********** Testing main20.cpp **********
+// Test: remove two-child node: inserts ten items prints tree, removes one
+main20.cpp Failed!
+//---------- test program code: main20.cpp ----------
+// Test: remove two-child node: inserts ten items prints tree, removes one
+/*
+ * main20.cpp
+ *
+ *  Created on: Oct. 14, 2014
+ *      Author: chrisgregg
+ */
+#include <iostream>
+#include "BinarySearchTree.h"
+
+using namespace std;
+
+int main() {
+  int rand_ints[12]={5,3,6,11,-5,-2,15,4,4,9,14,8};
+
+  BinarySearchTree bst;
+  for (int i=0;i<12;i++) {
+    cout << "Inserting " << rand_ints[i] << "\n";
+    bst.insert(rand_ints[i]);
+  }
+  bst.print_tree();
+  cout << "Removing 11.\n";
+  bst.remove(11);
+  bst.print_tree();
+
+  return 0;
+}
+
+//---------- end test program code ----------
+
+//---------- Expected output for main20.cpp (first 6000 characters): 
+Inserting 5
+Inserting 3
+Inserting 6
+Inserting 11
+Inserting -5
+Inserting -2
+Inserting 15
+Inserting 4
+Inserting 4
+Inserting 9
+Inserting 14
+Inserting 8
+
+                _______________5______________
+               /                              \
+        _______3______                         6______
+       /              \                               \
+      -5__             4*                            __11__
+          \                                        /      \
+          -2                                      _9      15
+                                                 /       /   
+                                                 8      14    
+Removing 11.
+
+                _______________5______________
+               /                              \
+        _______3______                         6______
+       /              \                               \
+      -5__             4*                            __14__
+          \                                        /      \
+          -2                                      _9      15
+                                                 /           
+                                                 8            
+//---------- End of expected output for main20.cpp.
+
+//---------- Your output for main20.cpp (first 6000 characters): 
+Inserting 5
+Inserting 3
+Inserting 6
+Inserting 11
+Inserting -5
+Inserting -2
+Inserting 15
+Inserting 4
+Inserting 4
+Inserting 9
+Inserting 14
+Inserting 8
+
+                _______________5______________
+               /                              \
+        _______3______                         6______
+       /              \                               \
+      -5__             4*                            __11__
+          \                                        /      \
+          -2                                      _9      15
+                                                 /       /   
+                                                 8      14    
+Removing 11.
+
+                _______________5______________
+               /                              \
+        _______3______                         6______
+       /              \                               \
+      -5__             4*                            __14__
+          \                                        /      \
+          -2                                      _9      15
+                                                 /       /   
+                                                 8       0    
+//---------- End of your output for main20.cpp.
+
+//---------- diff for main20.cpp (first 6000 characters): 
+32,33c32,33
+<                                                  /           
+<                                                  8            
+---
+>                                                  /       /   
+>                                                  8       0    
+//---------- End of diff for main20.cpp.
+Running valgrind to check for memory leaks.
+No memory leaks!
+********** Done Testing main20.cpp **********
+
+********** Testing main21.cpp **********
+// Test: mega-remove of 100 random int tree: removes 95 ints in tree, prints
+main21.cpp Failed!
+//---------- test program code: main21.cpp ----------
+// Test: mega-remove of 100 random int tree: removes 95 ints in tree, prints
+/*
+ * main21.cpp
+ *
+ *  Created on: Oct. 14, 2014
+ *      Author: chrisgregg
+ */
+#include <iostream>
+#include "BinarySearchTree.h"
+
+using namespace std;
+
+int main() {
+  int rand_ints[100]={84, 49, -62, 95, 75, 18, -56, -27, -73, 42,
+      80, 5, 35, 15, 64, -99, 3, 100, -36, -64,
+      23, -24, -70, -2, -52, -62, 64, -97, 49,
+      -33, 27, 31, -11, 55, 71, -66, 67, -69,
+      -87, -43, -94, -66, 74, -91, 47, 3, -98,
+      54, 90, -34, -7, -11, 58, 17, 80, 27, 93,
+      73, -65, 55, 90, 76, 55, 41, -45, -28, -34,
+      55, 0, 40, -63, -59, -48, -73, 17, -18, -39,
+      98, 23, -16, 89, 98, 87, -59, -77, -95, -18,
+      -11, 76, 17, 48, -59, 35, 58, 31, 13, -98,
+      -70, 21, -87};
+
+  BinarySearchTree bst;
+  for (int i=0;i<100;i++) {
+    cout << "Inserting " << rand_ints[i] << "\n";
+    bst.insert(rand_ints[i]);
+  }
+  cout << "Node count: " << bst.node_count() << "\n";
+  for (int i=0;i<95;i++) {
+    cout << "Removing " << rand_ints[i] << "\n";
+    if (rand_ints[i]==87) {
+      cout << "About to remove root!\n";
+      bst.print_tree();
+    }
+    bst.remove(rand_ints[i]);
+  }
+  bst.print_tree();
+
+  cout << "Finished!\n";
+  return 0;
+}
+
+//---------- end test program code ----------
+
+//---------- Expected output for main21.cpp (first 6000 characters): 
+Inserting 84
+Inserting 49
+Inserting -62
+Inserting 95
+Inserting 75
+Inserting 18
+Inserting -56
+Inserting -27
+Inserting -73
+Inserting 42
+Inserting 80
+Inserting 5
+Inserting 35
+Inserting 15
+Inserting 64
+Inserting -99
+Inserting 3
+Inserting 100
+Inserting -36
+Inserting -64
+Inserting 23
+Inserting -24
+Inserting -70
+Inserting -2
+Inserting -52
+Inserting -62
+Inserting 64
+Inserting -97
+Inserting 49
+Inserting -33
+Inserting 27
+Inserting 31
+Inserting -11
+Inserting 55
+Inserting 71
+Inserting -66
+Inserting 67
+Inserting -69
+Inserting -87
+Inserting -43
+Inserting -94
+Inserting -66
+Inserting 74
+Inserting -91
+Inserting 47
+Inserting 3
+Inserting -98
+Inserting 54
+Inserting 90
+Inserting -34
+Inserting -7
+Inserting -11
+Inserting 58
+Inserting 17
+Inserting 80
+Inserting 27
+Inserting 93
+Inserting 73
+Inserting -65
+Inserting 55
+Inserting 90
+Inserting 76
+Inserting 55
+Inserting 41
+Inserting -45
+Inserting -28
+Inserting -34
+Inserting 55
+Inserting 0
+Inserting 40
+Inserting -63
+Inserting -59
+Inserting -48
+Inserting -73
+Inserting 17
+Inserting -18
+Inserting -39
+Inserting 98
+Inserting 23
+Inserting -16
+Inserting 89
+Inserting 98
+Inserting 87
+Inserting -59
+Inserting -77
+Inserting -95
+Inserting -18
+Inserting -11
+Inserting 76
+Inserting 17
+Inserting 48
+Inserting -59
+Inserting 35
+Inserting 58
+Inserting 31
+Inserting 13
+Inserting -98
+Inserting -70
+Inserting 21
+Inserting -87
+Node count: 71
+Removing 84
+Removing 49
+Removing -62
+Removing 95
+Removing 75
+Removing 18
+Removing -56
+Removing -27
+Removing -73
+Removing 42
+Removing 80
+Removing 5
+Removing 35
+Removing 15
+Removing 64
+Removing -99
+Removing 3
+Removing 100
+Removing -36
+Removing -64
+Removing 23
+Removing -24
+Removing -70
+Removing -2
+Removing -52
+Removing -62
+Removing 64
+Removing -97
+Removing 49
+Removing -33
+Removing 27
+Removing 31
+Removing -11
+Removing 55
+Removing 71
+Removing -66
+Removing 67
+Removing -69
+Removing -87
+Removing -43
+Removing -94
+Removing -66
+Removing 74
+Removing -91
+Removing 47
+Removing 3
+Removing -98
+Removing 54
+Removing 90
+Removing -34
+Removing -7
+Removing -11
+Removing 58
+Removing 17
+Removing 80
+Removing 27
+Removing 93
+Removing 73
+Removing -65
+Removing 55
+Removing 90
+Removing 76
+Removing 55
+Removing 41
+Removing -45
+Removing -28
+Removing -34
+Removing 55
+Removing 0
+Removing 40
+Removing -63
+Removing -59
+Removing -48
+Removing -73
+Removing 17
+Removing -18
+Removing -39
+Removing 98
+Removing 23
+Removing -16
+Removing 89
+Removing 98
+Removing 87
+About to remove root!
+
+                                                                ______________________________________________________________87                                                              
+                                                               /                                                                                                                               
+                                ______________________________58______________________________                                                                                                                                
+                               /                                                              \                                                                                                                                
+                _____________-59*______________                                                76                                                                                                                                              
+               /                              \                                                                                                                                                                                                
+        _____-70                        ______21______                                                                                                                                                                                                
+       /                               /              \                                                                                                                                                                                                
+    _-95__                           -18__          __48                                                                                                                                                                                                  
+   /      \                               \        /                                                                                                                                                                                                       
+  -98      -87                              13      35                                                                                                                                                                                                        
+            \                            /  \    /                                                                                                                                                                                                           
+           -77                         -11  17  31                                                                                                                                                                                                            
+Removing -59
+Removing -77
+Removing -95
+Removing -18
+Removing -11
+Removing 76
+Removing 17
+Removing 48
+Removing -59
+Removing 35
+Removing 58
+Removing 31
+
+        ______13______
+       /              \
+    _-70              21  
+   /                       
+  -87                        
+ /                           
+-98                            
+Finished!
+//---------- End of expected output for main21.cpp.
+
+//---------- Your output for main21.cpp (first 6000 characters): 
+Inserting 84
+Inserting 49
+Inserting -62
+Inserting 95
+Inserting 75
+Inserting 18
+Inserting -56
+Inserting -27
+Inserting -73
+Inserting 42
+Inserting 80
+Inserting 5
+Inserting 35
+Inserting 15
+Inserting 64
+Inserting -99
+Inserting 3
+Inserting 100
+Inserting -36
+Inserting -64
+Inserting 23
+Inserting -24
+Inserting -70
+Inserting -2
+Inserting -52
+Inserting -62
+Inserting 64
+Inserting -97
+Inserting 49
+Inserting -33
+Inserting 27
+Inserting 31
+Inserting -11
+Inserting 55
+Inserting 71
+Inserting -66
+Inserting 67
+Inserting -69
+Inserting -87
+Inserting -43
+Inserting -94
+Inserting -66
+Inserting 74
+Inserting -91
+Inserting 47
+Inserting 3
+Inserting -98
+Inserting 54
+Inserting 90
+Inserting -34
+Inserting -7
+Inserting -11
+Inserting 58
+Inserting 17
+Inserting 80
+Inserting 27
+Inserting 93
+Inserting 73
+Inserting -65
+Inserting 55
+Inserting 90
+Inserting 76
+Inserting 55
+Inserting 41
+Inserting -45
+Inserting -28
+Inserting -34
+Inserting 55
+Inserting 0
+Inserting 40
+Inserting -63
+Inserting -59
+Inserting -48
+Inserting -73
+Inserting 17
+Inserting -18
+Inserting -39
+Inserting 98
+Inserting 23
+Inserting -16
+Inserting 89
+Inserting 98
+Inserting 87
+Inserting -59
+Inserting -77
+Inserting -95
+Inserting -18
+Inserting -11
+Inserting 76
+Inserting 17
+Inserting 48
+Inserting -59
+Inserting 35
+Inserting 58
+Inserting 31
+Inserting 13
+Inserting -98
+Inserting -70
+Inserting 21
+Inserting -87
+Node count: 71
+Removing 84
+Removing 49
+Removing -62
+Removing 95
+Removing 75
+Removing 18
+Removing -56
+Removing -27
+Removing -73
+Removing 42
+Removing 80
+Removing 5
+Removing 35
+Removing 15
+Removing 64
+Removing -99
+Removing 3
+Removing 100
+Removing -36
+Removing -64
+Removing 23
+Removing -24
+Removing -70
+Removing -2
+Removing -52
+Removing -62
+Removing 64
+Removing -97
+Removing 49
+Removing -33
+Removing 27
+Removing 31
+Removing -11
+Removing 55
+Removing 71
+Removing -66
+Removing 67
+Removing -69
+Removing -87
+Removing -43
+Removing -94
+Removing -66
+Removing 74
+Removing -91
+Removing 47
+Removing 3
+Removing -98
+Removing 54
+Removing 90
+Removing -34
+Removing -7
+Removing -11
+Removing 58
+Removing 17
+Removing 80
+Removing 27
+Removing 93
+Removing 73
+Removing -65
+Removing 55
+Removing 90
+Removing 76
+Removing 55
+Removing 41
+Removing -45
+Removing -28
+Removing -34
+Removing 55
+Removing 0
+Removing 40
+Removing -63
+Removing -59
+Removing -48
+Removing -73
+Removing 17
+Removing -18
+Removing -39
+Removing 98
+Removing 23
+Removing -16
+Removing 89
+Removing 98
+Removing 87
+About to remove root!
+
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                ______________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________87______________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               /                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              \
+                                                                                                                                                                                                                                                                ________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________38197344__________//---------- End of your output for main21.cpp.
+(It looks like your program had a seg fault.)
+
+//---------- diff for main21.cpp (first 6000 characters): 
+187,220c187,199
+<                                                                 ______________________________________________________________87                                                              
+<                                                                /                                                                                                                               
+<                                 ______________________________58______________________________                                                                                                                                
+<                                /                                                              \                                                                                                                                
+<                 _____________-59*______________                                                76                                                                                                                                              
+<                /                              \                                                                                                                                                                                                
+<         _____-70                        ______21______                                                                                                                                                                                                
+<        /                               /              \                                                                                                                                                                                                
+<     _-95__                           -18__          __48                                                                                                                                                                                                  
+<    /      \                               \        /                                                                                                                                                                                                       
+<   -98      -87                              13      35                                                                                                                                                                                                        
+<             \                            /  \    /                                                                                                                                                                                                           
+<            -77                         -11  17  31                                                                                                                                                                                                            
+< Removing -59
+< Removing -77
+< Removing -95
+< Removing -18
+< Removing -11
+< Removing 76
+< Removing 17
+< Removing 48
+< Removing -59
+< Removing 35
+< Removing 58
+< Removing 31
+< 
+<         ______13______
+<        /              \
+<     _-70              21  
+<    /                       
+<   -87                        
+<  /                           
+< -98                            
+< Finished!
+---
+>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 ______________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________87______________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________
+>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                /                                                                                                                                                                                                                                                                                                                                                                                                                                                  //---------- End of diff for main21.cpp.
+Running valgrind to check for memory leaks.
+No memory leaks!
+********** Done Testing main21.cpp **********
+
+********** Testing main22.cpp **********
+// Test: remove root when root has no children
+*** glibc detected *** ./hw4: double free or corruption (fasttop): 0x0000000000e34010 ***
+======= Backtrace: =========
+/lib64/libc.so.6[0x3dcca75e66]
+./hw4[0x4011bc]
+./hw4[0x401128]
+./hw4[0x401e67]
+/lib64/libc.so.6(__libc_start_main+0xfd)[0x3dcca1ed5d]
+./hw4[0x401029]
+======= Memory map: ========
+00400000-00406000 r-xp 00000000 00:2b 4447548                            /comp/15/grading/hw4/btanen01.2/tests/hw4
+00605000-00606000 rw-p 00005000 00:2b 4447548                            /comp/15/grading/hw4/btanen01.2/tests/hw4
+00e34000-00e55000 rw-p 00000000 00:00 0                                  [heap]
+3dcc600000-3dcc620000 r-xp 00000000 08:01 131224                         /lib64/ld-2.12.so
+3dcc81f000-3dcc820000 r--p 0001f000 08:01 131224                         /lib64/ld-2.12.so
+3dcc820000-3dcc821000 rw-p 00020000 08:01 131224                         /lib64/ld-2.12.so
+3dcc821000-3dcc822000 rw-p 00000000 00:00 0 
+3dcca00000-3dccb8a000 r-xp 00000000 08:01 131237                         /lib64/libc-2.12.so
+3dccb8a000-3dccd8a000 ---p 0018a000 08:01 131237                         /lib64/libc-2.12.so
+3dccd8a000-3dccd8e000 r--p 0018a000 08:01 131237                         /lib64/libc-2.12.so
+3dccd8e000-3dccd8f000 rw-p 0018e000 08:01 131237                         /lib64/libc-2.12.so
+3dccd8f000-3dccd94000 rw-p 00000000 00:00 0 
+3dcd600000-3dcd683000 r-xp 00000000 08:01 131270                         /lib64/libm-2.12.so
+3dcd683000-3dcd882000 ---p 00083000 08:01 131270                         /lib64/libm-2.12.so
+3dcd882000-3dcd883000 r--p 00082000 08:01 131270                         /lib64/libm-2.12.so
+3dcd883000-3dcd884000 rw-p 00083000 08:01 131270                         /lib64/libm-2.12.so
+3dd1600000-3dd1616000 r-xp 00000000 08:01 131287                         /lib64/libgcc_s-4.4.7-20120601.so.1
+3dd1616000-3dd1815000 ---p 00016000 08:01 131287                         /lib64/libgcc_s-4.4.7-20120601.so.1
+3dd1815000-3dd1816000 rw-p 00015000 08:01 131287                         /lib64/libgcc_s-4.4.7-20120601.so.1
+3dd3600000-3dd36e8000 r-xp 00000000 08:01 409175                         /usr/lib64/libstdc++.so.6.0.13
+3dd36e8000-3dd38e8000 ---p 000e8000 08:01 409175                         /usr/lib64/libstdc++.so.6.0.13
+3dd38e8000-3dd38ef000 r--p 000e8000 08:01 409175                         /usr/lib64/libstdc++.so.6.0.13
+3dd38ef000-3dd38f1000 rw-p 000ef000 08:01 409175                         /usr/lib64/libstdc++.so.6.0.13
+3dd38f1000-3dd3906000 rw-p 00000000 00:00 0 
+7f0dba1b3000-7f0dba1b8000 rw-p 00000000 00:00 0 
+7f0dba1d6000-7f0dba1e8000 rw-p 00000000 00:00 0 
+7fffe29e4000-7fffe29f9000 rw-p 00000000 00:00 0                          [stack]
+7fffe2a00000-7fffe2a01000 r-xp 00000000 00:00 0                          [vdso]
+ffffffffff600000-ffffffffff601000 r-xp 00000000 00:00 0                  [vsyscall]
+main22.cpp Failed!
+//---------- test program code: main22.cpp ----------
+// Test: remove root when root has no children
+/*
+ * main22.cpp
+ *
+ *  Created on: Oct. 19, 2014
+ *      Author: chrisgregg
+ */
+#include <iostream>
+#include "BinarySearchTree.h"
+
+using namespace std;
+
+int main() {
+  BinarySearchTree bst;
+
+  bst.insert(12);
+  bst.print_tree();
+  cout << "Removing 12.\n";
+  bst.remove(12);
+  bst.print_tree();
+
+  return 0;
+}
+
+
+//---------- end test program code ----------
+
+//---------- Expected output for main22.cpp (first 6000 characters): 
+
+12
+Removing 12.
+
+  
+//---------- End of expected output for main22.cpp.
+
+//---------- Your output for main22.cpp (first 6000 characters): 
+
+12
+Removing 12.
+
+ 0
+GOT SIGNAL 134 ./hw4
+//---------- End of your output for main22.cpp.
+(I'm not sure what type of error it was.
+You can check http://goo.gl/reLHm8 and see what
+Unix Signal 6 stands for)
+
+//---------- diff for main22.cpp (first 6000 characters): 
+5c5,6
+<   
+---
+>  0
+> GOT SIGNAL 134 ./hw4
+//---------- End of diff for main22.cpp.
+Running valgrind to check for memory leaks.
+No memory leaks!
+********** Done Testing main22.cpp **********
+
+********** Testing main23.cpp **********
+// Test: remove root when root has one child
+main23.cpp Failed!
+//---------- test program code: main23.cpp ----------
+// Test: remove root when root has one child
+/*
+ * main23.cpp
+ *
+ *  Created on: Oct. 19, 2014
+ *      Author: chrisgregg
+ */
+#include <iostream>
+#include "BinarySearchTree.h"
+
+using namespace std;
+
+int main() {
+  BinarySearchTree bst;
+
+  bst.insert(12);
+  bst.insert(20);
+  bst.insert(15);
+  bst.insert(23);
+  bst.print_tree();
+  cout << "Removing 12.\n";
+  bst.remove(12);
+  bst.print_tree();
+
+  return 0;
+}
+
+
+//---------- end test program code ----------
+
+//---------- Expected output for main23.cpp (first 6000 characters): 
+
+      12__
+          \
+          20
+         /  \
+        15  23
+Removing 12.
+
+  20
+ /  \
+15  23
+//---------- End of expected output for main23.cpp.
+
+//---------- Your output for main23.cpp (first 6000 characters): 
+
+      12__
+          \
+          20
+         /  \
+        15  23
+Removing 12.
+
+       0__
+          \
+          20
+         /  \
+        15  23
+//---------- End of your output for main23.cpp.
+
+//---------- diff for main23.cpp (first 6000 characters): 
+9,11c9,13
+<   20
+<  /  \
+< 15  23
+---
+>        0__
+>           \
+>           20
+>          /  \
+>         15  23
+//---------- End of diff for main23.cpp.
+Running valgrind to check for memory leaks.
+No memory leaks!
+********** Done Testing main23.cpp **********
+
+********** Testing main24.cpp **********
+// Test: remove root when root has two children
+main24.cpp Failed!
+//---------- test program code: main24.cpp ----------
+// Test: remove root when root has two children
+/*
+ * main24.cpp
+ *
+ *  Created on: Oct. 19, 2014
+ *      Author: chrisgregg
+ */
+#include <iostream>
+#include "BinarySearchTree.h"
+
+using namespace std;
+
+int main() {
+  BinarySearchTree bst;
+
+  bst.insert(12);
+  bst.insert(20);
+  bst.insert(15);
+  bst.insert(23);
+  bst.insert(5);
+  bst.insert(6);
+  bst.insert(3);
+  bst.print_tree();
+  cout << "Removing 12.\n";
+  bst.remove(12);
+  bst.print_tree();
+
+  return 0;
+}
+
+
+//---------- end test program code ----------
+
+//---------- Expected output for main24.cpp (first 6000 characters): 
+
+    __12__
+   /      \
+  _5      20
+ /  \    /  \
+ 3   6  15  23
+Removing 12.
+
+    __15__
+   /      \
+  _5      20
+ /  \       \
+ 3   6      23
+//---------- End of expected output for main24.cpp.
+
+//---------- Your output for main24.cpp (first 6000 characters): 
+
+    __12__
+   /      \
+  _5      20
+ /  \    /  \
+ 3   6  15  23
+Removing 12.
+
+    __15__
+   /      \
+  _5      20
+ /  \    /  \
+ 3   6   0  23
+//---------- End of your output for main24.cpp.
+
+//---------- diff for main24.cpp (first 6000 characters): 
+12,13c12,13
+<  /  \       \
+<  3   6      23
+---
+>  /  \    /  \
+>  3   6   0  23
+//---------- End of diff for main24.cpp.
+Running valgrind to check for memory leaks.
+No memory leaks!
+********** Done Testing main24.cpp **********
+
+********** Testing main25.cpp **********
+// Test: remove root when root is in the tree multiple times
+main25.cpp Passed!
+Running valgrind to check for memory leaks.
+No memory leaks!
+********** Done Testing main25.cpp **********
+
+********** Testing main26.cpp **********
+// Test: remove one-child node when node is in tree multiple times
+main26.cpp Passed!
+Running valgrind to check for memory leaks.
+No memory leaks!
+********** Done Testing main26.cpp **********
+
+********** Testing main27.cpp **********
+// Test: remove childless node when node is in tree multiple times
+main27.cpp Passed!
+Running valgrind to check for memory leaks.
+No memory leaks!
+********** Done Testing main27.cpp **********
+
+********** Testing main28.cpp **********
+// Test: remove two-child node when value is in tree multiple times
+main28.cpp Passed!
+Running valgrind to check for memory leaks.
+No memory leaks!
+********** Done Testing main28.cpp **********
+
+********** Testing main29.cpp **********
+// Test: attempt to remove a node that doesn't exist in the tree
+main29.cpp Passed!
+Running valgrind to check for memory leaks.
+No memory leaks!
+********** Done Testing main29.cpp **********
+
+********** Testing main30.cpp **********
+// Test: copy constructor test
+main30.cpp Passed!
+Running valgrind to check for memory leaks.
+No memory leaks!
+********** Done Testing main30.cpp **********
+
+********** Testing main31.cpp **********
+// Test: assignment (=) overload
+main31.cpp Passed!
+Running valgrind to check for memory leaks.
+No memory leaks!
+********** Done Testing main31.cpp **********
+
+********** Testing main32.cpp **********
+// Test: original main from assignment
+main32.cpp Passed!
+Running valgrind to check for memory leaks.
+No memory leaks!
+********** Done Testing main32.cpp **********
+
+*/*/*/*/*/ Some of the tests failed! /*/*/*/*/*
+Tests that failed: main17.cpp, main20.cpp, main21.cpp, main22.cpp, main23.cpp, main24.cpp, 
+
+...done preparing for testing.
+your submission has been accepted!
+cleaning up after testing...
+Cleaning up...
+...done cleaning up after testing
+your submission is complete!

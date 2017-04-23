@@ -1,0 +1,14 @@
+Operational Semantics Assignment, COMP-105
+==========================================
+Ben Tanen & Amit Patel
+
+Our solution involved making a new local variable environment by combining the 
+local and formal namelists and valuelists. This was all done in eval.c within 
+the eval function (under the USERDEF switch case). This was done by making two
+empty lists and copy the values first from the local lists and then appending
+the values and names from the formal variable lists. They were then combined.
+
+Additionally, we made small changes to the basis definitions in impcore.c to
+fit with the new local variable declaration standard.
+
+In total, this assignment took us 3.5hrs.

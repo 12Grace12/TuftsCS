@@ -1,0 +1,52 @@
+Design Pre-planning
+
+Compression Steps:
+    1. Read in file, convert to image type
+        a. read in file from command-line, done by provided code
+        b. use ppmread() to convert file pointer to ppm struct
+    2. trim image to have even row / col count
+        a. change width / height values
+        b. potentially trim actual pixels by copying from old img to new img
+    3. using block-major (blocks of blocksize = 2) mapping function, change to floats and transform to Y/Pb/Pr
+        a. cast each integer value to float
+        b. use provided equations to calculate new values
+        c. add new values to associated calculations in struct
+    4. once done with the four pixels from block, use all 4 to pack each 2-by-2 into 32-bit word
+        a. find averages of Pb / Pr
+        b. pass averages to index_of_chroma()
+        c. get discrete cosine for Y's (as a,b,c,d)
+        d. convert b,c,d to 5-bit signed values (btwn -0.3 & 0.3)
+        e. using calculations of (b)-(d), pack into 32-bit codewords
+        f. print
+
+Decompression Steps:
+    1. read from header to get width / height (use provided code)
+    2. alloc new pixmap stuct with width / height from above
+        a. calculate denominator value (dynamically based on w/h?)
+        b. make a new array with methods->new method
+    3. read in each word
+        a. unpack values (a,b,c,d, avg.Pb, avg.Pr)
+        b. pass avg.Pb & avg.Pr to chroma_of_index()
+        c. use inverse discrete cosine to get Y(1-4)
+        d. using values from (b)/(c), convert comp. video format to RGB format
+        e. write RGB pixels to corresponding location in UArray
+            i. block col = (nth-word)(2) % width
+            ii. block row = (nth-word)(2) / width
+            iii. adjust pixel accordingly based on location within block
+    4. once every word read, call Pnm_ppmwrite()
+
+Modules:
+    1. read / write module (ppm_compression_io)
+        a. read_ppm, compression = use Pnm_ppmread
+        b. read_codeword, decompress = takes in file ptr, uses fgets / returns word
+        c. print_codeword, compression = use fprintf
+        d. print_ppm, decompression = Pnm_ppmwrite()
+        e. read_header, decompression = use provided code to return new Pnm_ppm
+    2. bitpack
+    3. composite to rgb, rgb to composite (rgb_composite_conversion)
+        a. comp_to_rgb for Y, Pr, Pb
+        b. rgb_to_comp for r, g, b
+    4. discrete cosine (discrete_cosine)
+        a. discr_cos -> takes in 4 values, returns 4 values
+        b. inv_discr_cos -> takes in 4 values, returns 4 values
+    

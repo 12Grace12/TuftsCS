@@ -1,0 +1,54 @@
+COMP-105, Higher-Order Functions Assignment
+Benjamin Tanen
+10/22/2015
+
+I did some collaboration work with Jake Watton, Becky Cutler, and Nathan
+Majumder. We discussed approaches for a few of the questions, and we walked
+through the structure of a few questions (namely 23 & proof M).
+
+I completed all assigned portions of the homwork (10, 11, 16, 23, and parts A,
+M, T). I also completed the extra credit at the end of the assignment (write a
+quicksort).
+
+### Dimension Discussion ###
+Form: I believe my form is quite good. It is clear as to what is happening so
+      that anyone reading it can do so quickly and easily. I follow the offside
+      rule and I make good use of vertical blank space. There is no extra code
+      or tests in my code. I do not put all of my ending parenthesis on the 
+      last line for personal taste reasons but this was determined to be okay.
+      For this, I think my form is Exemplary.
+Documentation: I believe that my documentation is certainly sufficient for
+               anyone reading my code. I properly explain the contract and 
+               functionality of each function above it and I add additional
+               comments within the functions for more complex code. I think I
+               am in that sweet spot of not too much comments and not too little.
+               Thus I believe my documentation of Exemplary.
+Naming: I believe that my naming scheme makes sense and is clear. For most of
+        the functions, I stuck to the naming scheme used by the assignment
+        (using xs, ys, etc). When there was more openness as to what to name
+        the variables and functions, I think I named my variables simply, most
+        of the time as single letters indicating what the thing is (pair p,
+        list l, set s, etc). For functions, every function used the name given
+        or it is a verb or noun function describing what it does / what it 
+        returns. Thus I think my naming meets Exemplary.
+Structure: For all of my functions in 10 / 11, they all use short and simple
+           definitions using lambdas and fold(r/l). I define all helper
+           functions inside let(*)(rec) statements and I think I have just as
+           much code as I need. What the code is doing is quite clear, needing
+           very little additional documentation.
+           Additionally, I did implement Quicksort and for it, I didn't use
+           the function append. I only use one lambda and there is only one
+           if-statement. I believe it has a clear, understandable meaning,
+           particularly with the use of the let*.
+           For all of this, I believe my structure is Exemplary.  
+Cost: By the definition of the cost, I check if a list is empty in constant
+      time using 'null?'. I am also able to check if a list is a list (or an
+      atom) in constant time using 'atom?'. Thus I think this meets Exemplary.
+Correctness: To the best of my knowledge, my functions pass all testing that
+             I have thus devised. That includes a few tricky test cases which
+             makes me feel good about my correctness. However, I could see
+             potentially how my code might fail a few stringent test cases
+             so I believe my correctness is Satisfactory.
+
+I spent approximately 20-hours on this assignment.
+

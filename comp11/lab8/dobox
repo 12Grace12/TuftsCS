@@ -1,0 +1,10 @@
+printf "\016"
+cat top
+for x in 1 2 3 4 5 
+do
+   cat mid
+   cat div
+done
+cat mid
+cat bot
+printf "\017\n"

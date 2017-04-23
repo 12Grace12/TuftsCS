@@ -1,0 +1,34 @@
+Comp40 Assignment 7: Optimization of Universal Machine
+by Ben Tanen and Rebecca Larson
+
+1. We have not collaborated with anyone on this assignment.
+
+2. The routine that takes up the most time in our final optimized UM is the 
+   UM_run_program() function. It takes up 99.37% of our total runtime. This
+   is because this is the function that calls almost all other functions 
+   (the only others involve reading the instructions and memory managment).
+   Furthermore, all other functions are inlined, so a significant amount of
+   time is being spent on the instructions themselves, but are recorded as
+   time spent in UM_run_program(). Within this function, we argue that the
+   assembly code is as efficient as it can be. The assembly code shows that
+   most of the lines are devoted to Bitpack (shifting, and-ing, and xor-ing).
+   One could make this function more efficent with a different method of 
+   packing information, but creating a new bitpacking algorithm is beyond
+   the scope of this assignment. The rest of the operations are simple
+   and generally one line of code corresponds to one line of assembly code.
+   For example, our function load_value() takes only one line of assembly
+   code to execute: "%ebx,0x6039c0(,%rax,4)". From these one-line assembly
+   code instructions, there is no obvious way to improve the assembly code
+   further. There are no unnecessary computation in the loops being done and
+   it appears that data is being efficiently stored in the registers when it
+   can be, so no unnecessary memory accesses. Overall, there are 57 lines
+   of assembly code for 23 lines of C code, which is not taking into account
+   that many functions called from UM_run_program() are inlined.
+
+3. We spent about 8 hours analyzing the problem and 9 hours solving the problem.
+
+4. See included labnotes.pdf for our comments, timings, instruction counts, and
+   descriptions of the changes we made.
+
+5. The benchmarks we used for analysis were midmark.um, sandmark.umz, and 
+   a partial solution to advent.umz. These are run with the run file.

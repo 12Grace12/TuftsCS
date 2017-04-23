@@ -1,0 +1,122 @@
+// utilized calling convention:
+// r0 is set and assumed to be equal to zero
+// r1 is used a temp throughout this file (used diffrently in calc40.ums)
+// r2 is used to hold the vstack pointer
+// r3 is used to hold the pstack pointer
+// r4 is used to hold the value that is currently being manipulated (volatile
+// general purpose register)
+// r5 is used as a volatile general purpose register
+// r6 and r7 were consistently used as temporary registers
+
+.section text
+// print the contents of the stack from top to bottom
+// called from jumptable
+newline:
+        // set r3 to the empty pstack (to store printed numbers)
+        r3 := pstack_bottom
+
+        // moves contents of vstack to pstack (results in empty vstack)
+        // as numbers are transferred, numbers are printed (using print_num)
+        empty_vstack:
+                // checks if vstack is already empty
+                // frees additional temp register r1 for comparison (xor)
+                .temps r1, r6, r7
+                if (r2 == vstack_bottom) goto empty_pstack
+                // restores r1 to general purpose register state
+                .temps r6, r7               
+
+                // pops top value from vstack (from r2 to r4), copies to pstack
+                // (from r4 to r3), calls print_num (with r4 set)
+                pop r4 off stack r2
+                push r4 on stack r3
+                goto print_num
+
+        // moves contents of pstack back to vstack (results in empty pstack)
+        // restores two stacks to original state (as of start of newline)
+        empty_pstack:
+                // checks if pstack is already empty
+                // frees additional temp register for comparison
+                .temps r1, r6, r7
+                if (r3 == pstack_bottom) goto waiting
+                // restores r1 to general purpose register state
+                .temps r6, r7                
+
+                // pops top value from pstack (from r3 to r4), copies to value
+                // to pstack (from r4 to r2) 
+                pop r4 off stack r3
+                push r4 on stack r2
+
+                // loops back to top
+                goto empty_pstack
+
+// prints a particular number in decimal form
+// assumes number to print is stored in r4
+print_num:
+        // prints formatting buffer
+        output ">>> "
+
+        // tests for cases: number is zero, positive number, or most 
+        // negative number
+        // sets r5 to hold most negative number
+        r5 := 0x80000000
+        if (r4 == 0) goto print_zero
+        if (r4 == r5) goto print_most_negative using r1 
+        if (r4 >s 0) goto before_mod_loop using r1
+
+        // output negative sign (in case number in r4) is negative
+        // flip sign of number in r4
+        output '-'
+        r4 := 0 - r4
+
+        // sets up registers for mod_looping through number to print 
+        before_mod_loop:
+                // initalizes r1 to be used as iterator for mod_loop 
+                r1 := 0
+
+        // reduces number digit by digit, storing each digit in stack pstack
+        mod_loop:
+                // increments iterator
+                r1 := r1 + 1
+
+                // set r5 to the least significant digit reducing number
+                // stores r5 digit on stack 
+                r5 := r4 mod 10
+                push r5 on stack r3
+
+                // reduces r4 (1/10th of original) to continue loop
+                r4 := r4 / 10
+
+                // checks if r4 (the reducing number) signifies end of loop
+                if (r4 != 0) goto mod_loop
+
+        // once number has been reduced down to digits and these digts have been
+        // stored in the pstack, popped off the stack and printed
+        print_loop:
+                // increment iterator
+                r1 := r1 - 1
+
+                // gets r4 value from top of stack, increments digit by 48 (to
+                // correct ascii value) and outputs
+                pop r4 off stack r3
+                r4 := r4 + 48
+                output r4
+
+                // checks if r1 (the incrementor) signifies end of loop
+                if (r1 != 0) goto print_loop
+
+                // prints new line at end of number
+                output '\n'
+
+                // loops back to new_line / empty_vstack
+                goto empty_vstack
+
+        // prints 0 for particular printing case
+        print_zero:
+                output "0\n"
+                goto empty_vstack
+
+        // prints most negative number for particular printing case
+        print_most_negative:
+                output "-2147483648\n"
+                goto empty_vstack
+

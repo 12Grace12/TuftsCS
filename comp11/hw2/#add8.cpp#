@@ -1,0 +1,70 @@
+//
+//   add8.cpp
+//   purpose: add eight user-input doubles
+//        by: Benjamin Tanen
+//      date: 1/23/14
+//
+
+#include <iostream>
+
+using namespace std;
+
+int main()
+{
+    /* - - The following code adds eight numbers using nine variables and 8 lines - -
+    double sum = 0;
+    double num1, num2, num3, num4, num5, num6, num7, num8;
+
+    cout << "Enter eight digits to be added: ";
+    cin >> num1 >> num2 >> num3 >> num4 >> num5 >> num6 >> num7 >> num8;
+    sum = num1 + num2 + num3 + num4 + num5 + num6 + num7 + num8;
+
+    cout << "Total sum is " << sum << endl; 
+    */
+
+    /* - - The following code adds eight numbers using two variables and 28 lines - -
+    double sum = 0;
+    double num;
+
+    cout << "Enter eight digits to be added: ";
+    cin >> num;
+    sum = num + sum;
+
+    cin >> num;
+    sum = num + sum;
+
+    cin >> num;
+    sum = num + sum;
+
+    cin >> num;
+    sum = num + sum;
+
+    cin >> num;
+    sum = num + sum;
+
+    cin >> num;
+    sum = num + sum;
+
+    cin >> num;
+    sum = num + sum;
+
+    cin >> num;
+    sum = num + sum;
+
+    cout << "Total sum is " << sum << endl;
+    */
+
+    // The following code adds eight numbers using three variables and 12 lines - -
+    double sum = 0;
+    double num;
+    int i = 0;
+
+    cout << "Enter eight numbers (Use either spaces/enters to break-up the numbers): ";
+    
+    while (i < 8) {
+    	cin >> num;
+    	sum = num + sum;
+    	i = 1 + i;
+    }
+
+    cout << "Total sum is "

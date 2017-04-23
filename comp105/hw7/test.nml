@@ -1,0 +1,15 @@
+(+ 1 #t)                                  ; expecting type-error
+(+ 1 (if #t 1 0))                         ; expecting 2
+
+(if (< 3 4) #t '(4 3 2))                  ; expecting type-error
+(if (< 3 4) '(#t #f) '())                 ; expecting '(#t #f)
+
+(cons 4 ((lambda (x) (cons x x)) '()))    ; expecting type-error
+(cons '(4) ((lambda (x) (cons x x)) '())) ; expecting '((4) '()) 
+
+(append '(#t #f) '(1 2 3))                ; expecting type-error
+(append '((1 2 3)) '(1 2 3))              ; expecting type-error
+(append '() '(1 2 3))                     ; expecting '(1 2 3)
+
+(if (cadr '(1 2 3)) '() '(#t #f))         ; expecting type-error
+(if (cadr '(#t #f)) '() '(1 2 3))         ; expecting '(1 2)

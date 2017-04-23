@@ -1,0 +1,18 @@
+
+
+	red()
+	{
+		printf "\033[1m\033[31m"
+	}
+	yellow()
+	{
+		printf "\033[1m\033[33m"
+	}
+	normal()
+	{
+		printf "\033[22m\033[30m"
+	}
+	goto()
+	{
+		printf "\033[%d;$dH" "$1" "$2"
+	}

@@ -1,0 +1,183 @@
+COMP-40 HW #2 iii - Design
+By: Ben Tanen and McKenzie Welter
+
+This document includes two different designs: one for UArray2 (a 2D UArray) and
+one for Bit2 (a 2D array of bits).
+
+Design #1: UArray2
+
+1. What is the abstract thing you are trying to represent? Often the answer will
+   be in terms of sets, sequences, and finite maps.
+
+   In this interface, we will be representing a two-dimensional unboxed array.
+   The array will be defined by a width and height given by the user. Elements
+   of the array can then be accessed from the appropriate row / column index.
+
+2. What functions will you offer, and what are the contracts of that those
+   functions must meet?
+
+   This interface will have a few functions. First, we will use two functions
+   to manage the memory of a UArray2. UArray2_new() will allocate the space for
+   the UArray2 (taking in arguments of width, height, and element size).
+   UArray2_free() will deallocate the memory for a UArray2 after it is used.
+
+   We will also include functions UArray2_width(), UArray2_height(), and
+   UArray2_size() and they will return respectively the width and height of the
+   array(s) and the size of the elements.
+
+   In order to access the element at a given index, we will include
+   UArray2_at(), which will return a pointer to the element at that index.
+
+   Our 2D UArray2 will have functions to resize (UArray2_resize) and copy
+   (UArray2_copy) the contents in the original 2D UArray.
+
+   Finally, there will be two functions for mapping the contents of the array.
+   UArray2_map_row_major() will call a passed function (the argument apply())
+   on each element in the array by going through in row then column order.
+   UArray2_map_col_major() will perform the same operation as row_major except
+   in column then row order.
+
+3. What examples do you have of what the functions are supposed to do?
+
+   _new() will allocate height x width element size pieces of memory for
+   the UArray2. _free() will deallocate the memory previously made by _new()
+   and delete the UArray2.
+
+   _size(), _width(), and _height() will return the element size of the array,
+   width of the array, and height of the array.
+
+   _at() will return a pointer to the element that is at the index that the user
+   requested.
+
+   _resize() will not return anything but it will appropriately resize the 2D
+   UArray2 based on the specifications from the user. _copy will return a new
+   UArray2 with the same contents as the original UArray2.
+
+   The two map functions (row_major and col_major) will perform a passed
+   function (passed with a function pointer) on all elements of the 2D array.
+
+4. What representation will you use, and what invariants will it satisfy?
+   (This question is especially important to answer precisely.)
+
+   In order to represent a 2D UArray2, we will use on large UArray. The size
+   of this UArray will be the product of the height and width of the intended
+   2D array. In order to index from this single 1D array, we will use a
+   function to convert the 2D index to a single 1D index.
+
+   An invariant that will hold true for our array is that each element / index
+   will be either NULL or filled with a particular element. This is true of any
+   2D array and our representation will maintain this.   
+
+5. When a representation satisfies all invariants, what abstract thing from
+   step #1 does it represent? That is, what is the inverse mapping from any
+   particular representation to the abstraction that it represents (this
+   question is also especially important to answer precisely)?
+
+   ------------------------
+
+6. What test cases have you devised?
+
+   In order to test our interface and implementation, we have come up with a
+   few tests to make sure our program runs smoothly / appropriately. The first
+   two have to do with testing either full or empty arrays (running _new and
+   _free on these two types of UArray2) to make sure these work correctly.
+
+   Next we can run multiple tests to attempt to index / access outside the
+   scope of the array to make sure that the proper run-time errors are thrown.
+
+   We will also be running some test cases where the user blatantly gives us
+   the wrong information. For example, if we are requesting an integer as an
+   argument and the user gives us a NULL pointer, this should throw an error.
+
+7. What programming idioms will you need?
+
+    -------------------------
+
+Design #2: Bit2
+
+1. What is the abstract thing you are trying to represent? Often the answer will
+   be in terms of sets, sequences, and finite maps.
+  
+   In this interface, we will be representing a two-dimensional bit array.
+   The array will be defined by a width and height given by the user. Bits
+   within the array can then be accessed from the appropriate row/column index.
+
+2. What functions will you offer, and what are the contracts of that those
+   functions must meet?
+
+   This interface will have a few functions. First, we will use two functions
+   to manage the memory of a 2D bit array. Bit2_new() will allocate the space
+   for the bit array (taking in arguments of width and height). Bit2_free() 
+   will deallocate the memory for a bit array after it is used.
+
+   We will also include functions Bit2_width() and Bit2_height(), and they
+   will return respectively the width and height of the array(s).
+
+   In order to see the bit at a given index, we will include Bit2_get(), which
+   will return the bit at that index. In order to change the bit at a given
+   index, we will include Bit2_put(), which will change the bit at the given
+   index to the value passed to _put().
+
+   Our 2D bit array will have functions to resize (Bit2_resize) and copy
+   (Bit2_copy) the bits in the 2D bit array.
+
+   Finally, there will be two functions for mapping the bits of the array.
+   Bit2_map_row_major() will call a passed function (the argument apply())
+   on each bit in the array by going through in row then column order.
+   Bit2_map_col_major() will perform the same operation as row_major except
+   in column then row order.
+
+3. What examples do you have of what the functions are supposed to do?
+
+   _new() will allocate height * width bits of memory for the bit array. _free()
+   will deallocate the memory previously made by _new() and delete the array.
+
+   _width() and _height() will return the width and height of the array.
+
+   _get() will return the bit that is at the index that the user requested. 
+   _put() will change the bit at the specified index to the value the user
+   gives.
+
+   _resize() will not return anything but it will appropriately resize the 2D
+   bit array based on the specifications from the user. _copy will return a new
+   bit array with the same contents as the original array.
+
+   The two map functions (row_major and col_major) will perform a passed
+   function (passed with a function pointer) on all bits of the 2D array.
+
+4. What representation will you use, and what invariants will it satisfy?
+   (This question is especially important to answer precisely.)
+
+   In order to represent a 2D bit array, we will use on large array. The size
+   of this array will be the product of the height and width of the intended
+   2D array. In order to index from this single 1D array, we will use a
+   function to convert the 2D index to a single 1D index.
+
+   An invariant that will hold true for our array is that each element / index
+   will be either 0 or 1 (based on the bit). This is true of any bit array and
+   our representation will maintain this.
+
+5. When a representation satisfies all invariants, what abstract thing from
+   step #1 does it represent? That is, what is the inverse mapping from any
+   particular representation to the abstraction that it represents (this
+   question is also especially important to answer precisely)?
+
+   ------------------------
+
+6. What test cases have you devised?
+
+   In order to test our interface and implementation, we have come up with a
+   few tests to make sure our program runs smoothly / appropriately. The first
+   two have to do with testing either full or empty arrays (running _new and
+   _free on these two types of bit array) to make sure these work correctly.
+
+   Next we can run multiple tests to attempt to index / access outside the
+   scope of the array to make sure that the proper run-time errors are thrown.
+
+   We will also be running some test cases where the user blatantly gives us
+   the wrong information. For example, if we are requesting an integer as an
+   argument and the user gives us a NULL pointer, this should throw an error.
+
+7. What programming idioms will you need?
+
+    -------------------------

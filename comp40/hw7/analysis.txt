@@ -1,0 +1,280 @@
+Flat profile:
+
+Each sample counts as 0.01 seconds.
+  %   cumulative   self              self     total           
+ time   seconds   seconds    calls   s/call   s/call  name    
+ 20.79      0.27     0.27 104531826     0.00     0.00  UM_get_segment_word
+ 15.40      0.47     0.20 114554032     0.00     0.00  UM_get_register
+ 15.40      0.67     0.20        1     0.20     1.26  UM_run_program
+  9.24      0.79     0.12 63604249     0.00     0.00  UM_set_register
+  7.70      0.89     0.10  3141040     0.00     0.00  addition
+  6.16      0.97     0.08 19461304     0.00     0.00  segmented_load
+  6.16      1.05     0.08 16200748     0.00     0.00  segmented_store
+  4.23      1.11     0.06  1410045     0.00     0.00  unmap_segment
+  3.08      1.15     0.04   104915     0.00     0.00  multiplication
+  2.31      1.18     0.03  4295890     0.00     0.00  bitwise_NAND
+  1.92      1.20     0.03  1410045     0.00     0.00  UM_unmap_segment
+  1.54      1.22     0.02 16230858     0.00     0.00  UM_set_segment_word
+  1.54      1.24     0.02        1     0.02     0.02  UM_new
+  1.15      1.26     0.02  3571109     0.00     0.00  load_program
+  0.77      1.27     0.01  2746419     0.00     0.00  conditional_move
+  0.77      1.28     0.01  1414835     0.00     0.00  UM_map_segment
+  0.77      1.29     0.01                             Mem_alloc
+  0.77      1.30     0.01                             input
+  0.38      1.30     0.01      181     0.00     0.00  output
+  0.00      1.30     0.00  1414834     0.00     0.00  map_segment
+  0.00      1.30     0.00   170336     0.00     0.00  division
+  0.00      1.30     0.00        1     0.00     0.00  UM_free
+  0.00      1.30     0.00        1     0.00     0.00  UM_read_program
+  0.00      1.30     0.00        1     0.00     0.00  read_in_file
+
+ %         the percentage of the total running time of the
+time       program used by this function.
+
+cumulative a running sum of the number of seconds accounted
+ seconds   for by this function and those listed above it.
+
+ self      the number of seconds accounted for by this
+seconds    function alone.  This is the major sort for this
+           listing.
+
+calls      the number of times this function was invoked, if
+           this function is profiled, else blank.
+ 
+ self      the average number of milliseconds spent in this
+ms/call    function per call, if this function is profiled,
+	   else blank.
+
+ total     the average number of milliseconds spent in this
+ms/call    function and its descendents per call, if this 
+	   function is profiled, else blank.
+
+name       the name of the function.  This is the minor sort
+           for this listing. The index shows the location of
+	   the function in the gprof listing. If the index is
+	   in parenthesis it shows where it would appear in
+	   the gprof listing if it were to be printed.
+
+		     Call graph (explanation follows)
+
+
+granularity: each sample hit covers 2 byte(s) for 0.77% of 1.30 seconds
+
+index % time    self  children    called     name
+                                                 <spontaneous>
+[1]     98.5    0.00    1.28                 main [1]
+                0.20    1.06       1/1           UM_run_program [2]
+                0.02    0.00       1/1           UM_new [15]
+                0.00    0.00       1/1           UM_read_program [23]
+                0.00    0.00       1/1           read_in_file [25]
+                0.00    0.00       1/1           UM_free [24]
+-----------------------------------------------
+                0.20    1.06       1/1           main [1]
+[2]     96.9    0.20    1.06       1         UM_run_program [2]
+                0.22    0.00 85070522/104531826     UM_get_segment_word [3]
+                0.08    0.12 19461304/19461304     segmented_load [5]
+                0.08    0.08 16200748/16200748     segmented_store [6]
+                0.12    0.00 63604249/63604249     UM_set_register [7]
+                0.10    0.01 3141040/3141040     addition [8]
+                0.06    0.00 1410045/1410045     unmap_segment [9]
+                0.03    0.02 4295890/4295890     bitwise_NAND [10]
+                0.04    0.00  104915/104915      multiplication [11]
+                0.03    0.00 1410045/1410045     UM_unmap_segment [12]
+                0.02    0.01 3571109/3571109     load_program [13]
+                0.02    0.00 16200748/16230858     UM_set_segment_word [14]
+                0.01    0.01 2746419/2746419     conditional_move [16]
+                0.00    0.01 1414834/1414834     map_segment [17]
+                0.01    0.00     181/181         output [21]
+                0.00    0.00  170336/170336      division [22]
+-----------------------------------------------
+                0.05    0.00 19461304/104531826     segmented_load [5]
+                0.22    0.00 85070522/104531826     UM_run_program [2]
+[3]     20.8    0.27    0.00 104531826         UM_get_segment_word [3]
+-----------------------------------------------
+                0.00    0.00     181/114554032     output [21]
+                0.00    0.00  209830/114554032     multiplication [11]
+                0.00    0.00  340672/114554032     division [22]
+                0.00    0.00 1410045/114554032     unmap_segment [9]
+                0.00    0.00 1414834/114554032     map_segment [17]
+                0.01    0.00 3571109/114554032     load_program [13]
+                0.01    0.00 5208649/114554032     conditional_move [16]
+                0.01    0.00 6282080/114554032     addition [8]
+                0.02    0.00 8591780/114554032     bitwise_NAND [10]
+                0.07    0.00 38922608/114554032     segmented_load [5]
+                0.08    0.00 48602244/114554032     segmented_store [6]
+[4]     15.4    0.20    0.00 114554032         UM_get_register [4]
+-----------------------------------------------
+                0.08    0.12 19461304/19461304     UM_run_program [2]
+[5]     15.2    0.08    0.12 19461304         segmented_load [5]
+                0.07    0.00 38922608/114554032     UM_get_register [4]
+                0.05    0.00 19461304/104531826     UM_get_segment_word [3]
+-----------------------------------------------
+                0.08    0.08 16200748/16200748     UM_run_program [2]
+[6]     12.7    0.08    0.08 16200748         segmented_store [6]
+                0.08    0.00 48602244/114554032     UM_get_register [4]
+-----------------------------------------------
+                0.12    0.00 63604249/63604249     UM_run_program [2]
+[7]      9.2    0.12    0.00 63604249         UM_set_register [7]
+-----------------------------------------------
+                0.10    0.01 3141040/3141040     UM_run_program [2]
+[8]      8.5    0.10    0.01 3141040         addition [8]
+                0.01    0.00 6282080/114554032     UM_get_register [4]
+-----------------------------------------------
+                0.06    0.00 1410045/1410045     UM_run_program [2]
+[9]      4.4    0.06    0.00 1410045         unmap_segment [9]
+                0.00    0.00 1410045/114554032     UM_get_register [4]
+-----------------------------------------------
+                0.03    0.02 4295890/4295890     UM_run_program [2]
+[10]     3.5    0.03    0.02 4295890         bitwise_NAND [10]
+                0.02    0.00 8591780/114554032     UM_get_register [4]
+-----------------------------------------------
+                0.04    0.00  104915/104915      UM_run_program [2]
+[11]     3.1    0.04    0.00  104915         multiplication [11]
+                0.00    0.00  209830/114554032     UM_get_register [4]
+-----------------------------------------------
+                0.03    0.00 1410045/1410045     UM_run_program [2]
+[12]     1.9    0.03    0.00 1410045         UM_unmap_segment [12]
+-----------------------------------------------
+                0.02    0.01 3571109/3571109     UM_run_program [2]
+[13]     1.6    0.02    0.01 3571109         load_program [13]
+                0.01    0.00 3571109/114554032     UM_get_register [4]
+-----------------------------------------------
+                0.00    0.00   30110/16230858     UM_read_program [23]
+                0.02    0.00 16200748/16230858     UM_run_program [2]
+[14]     1.5    0.02    0.00 16230858         UM_set_segment_word [14]
+-----------------------------------------------
+                0.02    0.00       1/1           main [1]
+[15]     1.5    0.02    0.00       1         UM_new [15]
+-----------------------------------------------
+                0.01    0.01 2746419/2746419     UM_run_program [2]
+[16]     1.5    0.01    0.01 2746419         conditional_move [16]
+                0.01    0.00 5208649/114554032     UM_get_register [4]
+-----------------------------------------------
+                0.00    0.01 1414834/1414834     UM_run_program [2]
+[17]     1.0    0.00    0.01 1414834         map_segment [17]
+                0.01    0.00 1414834/1414835     UM_map_segment [18]
+                0.00    0.00 1414834/114554032     UM_get_register [4]
+-----------------------------------------------
+                0.00    0.00       1/1414835     UM_read_program [23]
+                0.01    0.00 1414834/1414835     map_segment [17]
+[18]     0.8    0.01    0.00 1414835         UM_map_segment [18]
+-----------------------------------------------
+                                                 <spontaneous>
+[19]     0.8    0.01    0.00                 Mem_alloc [19]
+-----------------------------------------------
+                                                 <spontaneous>
+[20]     0.8    0.01    0.00                 input [20]
+-----------------------------------------------
+                0.01    0.00     181/181         UM_run_program [2]
+[21]     0.4    0.01    0.00     181         output [21]
+                0.00    0.00     181/114554032     UM_get_register [4]
+-----------------------------------------------
+                0.00    0.00  170336/170336      UM_run_program [2]
+[22]     0.0    0.00    0.00  170336         division [22]
+                0.00    0.00  340672/114554032     UM_get_register [4]
+-----------------------------------------------
+                0.00    0.00       1/1           main [1]
+[23]     0.0    0.00    0.00       1         UM_read_program [23]
+                0.00    0.00   30110/16230858     UM_set_segment_word [14]
+                0.00    0.00       1/1414835     UM_map_segment [18]
+-----------------------------------------------
+                0.00    0.00       1/1           main [1]
+[24]     0.0    0.00    0.00       1         UM_free [24]
+-----------------------------------------------
+                0.00    0.00       1/1           main [1]
+[25]     0.0    0.00    0.00       1         read_in_file [25]
+-----------------------------------------------
+
+ This table describes the call tree of the program, and was sorted by
+ the total amount of time spent in each function and its children.
+
+ Each entry in this table consists of several lines.  The line with the
+ index number at the left hand margin lists the current function.
+ The lines above it list the functions that called this function,
+ and the lines below it list the functions this one called.
+ This line lists:
+     index	A unique number given to each element of the table.
+		Index numbers are sorted numerically.
+		The index number is printed next to every function name so
+		it is easier to look up where the function in the table.
+
+     % time	This is the percentage of the `total' time that was spent
+		in this function and its children.  Note that due to
+		different viewpoints, functions excluded by options, etc,
+		these numbers will NOT add up to 100%.
+
+     self	This is the total amount of time spent in this function.
+
+     children	This is the total amount of time propagated into this
+		function by its children.
+
+     called	This is the number of times the function was called.
+		If the function called itself recursively, the number
+		only includes non-recursive calls, and is followed by
+		a `+' and the number of recursive calls.
+
+     name	The name of the current function.  The index number is
+		printed after it.  If the function is a member of a
+		cycle, the cycle number is printed between the
+		function's name and the index number.
+
+
+ For the function's parents, the fields have the following meanings:
+
+     self	This is the amount of time that was propagated directly
+		from the function into this parent.
+
+     children	This is the amount of time that was propagated from
+		the function's children into this parent.
+
+     called	This is the number of times this parent called the
+		function `/' the total number of times the function
+		was called.  Recursive calls to the function are not
+		included in the number after the `/'.
+
+     name	This is the name of the parent.  The parent's index
+		number is printed after it.  If the parent is a
+		member of a cycle, the cycle number is printed between
+		the name and the index number.
+
+ If the parents of the function cannot be determined, the word
+ `<spontaneous>' is printed in the `name' field, and all the other
+ fields are blank.
+
+ For the function's children, the fields have the following meanings:
+
+     self	This is the amount of time that was propagated directly
+		from the child into the function.
+
+     children	This is the amount of time that was propagated from the
+		child's children to the function.
+
+     called	This is the number of times the function called
+		this child `/' the total number of times the child
+		was called.  Recursive calls by the child are not
+		listed in the number after the `/'.
+
+     name	This is the name of the child.  The child's index
+		number is printed after it.  If the child is a
+		member of a cycle, the cycle number is printed
+		between the name and the index number.
+
+ If there are any cycles (circles) in the call graph, there is an
+ entry for the cycle-as-a-whole.  This entry shows who called the
+ cycle (as parents) and the members of the cycle (as children.)
+ The `+' recursive calls entry shows the number of function calls that
+ were internal to the cycle, and the calls entry for each member shows,
+ for that member, how many times it was called from other members of
+ the cycle.
+
+
+Index by function name
+
+  [19] Mem_alloc               [7] UM_set_register        [13] load_program
+  [24] UM_free                [14] UM_set_segment_word    [17] map_segment
+   [4] UM_get_register        [12] UM_unmap_segment       [11] multiplication
+   [3] UM_get_segment_word     [8] addition               [21] output
+  [18] UM_map_segment         [10] bitwise_NAND           [25] read_in_file
+  [15] UM_new                 [16] conditional_move        [5] segmented_load
+  [23] UM_read_program        [22] division                [6] segmented_store
+   [2] UM_run_program         [20] input                   [9] unmap_segment

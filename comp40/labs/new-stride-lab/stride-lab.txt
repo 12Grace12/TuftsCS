@@ -1,0 +1,142 @@
+                 COMP 40 Lab: Striding Through Memory
+        (for groups of two -- work with your locality partner)
+
+
+
++--------------------------------------------------------+
+|Keeper of the record: Ben Tanen                         |
+|--------------------------------------------------------|
+|Lab partner: McKenzie Welter                            |
++--------------------------------------------------------+
+
+
+Please edit this document to include your answers to the questions
+below, and use the submit40-lab-strides script to submit your
+answers. 
+
+Read these questions before you start doing the lab experiments, and
+use these questions to guide your choice of test cases. Remember, the
+particular tests listed in the instructions are just  hints for getting
+you started: you should run any experiments that you think will help
+you answer these questions or understand how the cache works.
+
+Don't worry if you aren't sure you can get all of these questions
+right. The goal here is to start teaching you to do what cash
+designers do: to think step-by-step through what happens in a cache as
+a program runs, he's actual simulations to determine which designs
+perform best on which applications, and from them to extract general
+principles of cache design.
+
+FOR THESE FIRST FEW QUESTIONS, ASSUME A DIRECT MAPPED CACHE (the
+-assoc 1 setting for testcachesim, which is the default).
+
+Cache Size
+----------
+
+Q1a: If you know the block size in bytes for a cache and the number of
+     lines in the cache, what will be the total size of the cache in
+     bytes? 
+
+     It is the number of lines times the block size (in bytes).
+
+Q1b: For testcachesim, describe in detail how performance changes as
+     the size of the cache gets larger, presuming the size  of the
+     test array remains the same?  
+
+     As you increase the size of the cache, your performance will also
+     increase. This is because there is more space to keep all the memory,
+     allowing you to use the cache more efficiently. However, the speedup will
+     plateau once the cache size is equal to the total size of the array (4 *
+     element size).
+
+Q1c. Is there a point beyond which performance stops improving as
+     cache size increases? Why?
+
+     The performance will only continue to improve while the cache size is
+     less than or equal to the amount of data needing to be stored. For
+     example, if the array holds 64 bytes (4bytes * 16 elements), the
+     performance will peak when the cache is equal to 64 bytes.
+
+     This is because once you expand the cache beyond the size described above
+     there will just be unnecessary space being allocated in the cache. If you
+     only need 64 bytes to store your data, having 128 bytes will leave you
+     with 64 bytes of unused space.
+
+Q1d. Sometimes performance is excellent (that is, the cache gives us a
+     very good speed up) but then making the test array just a little
+     bigger reduces performance dramatically. Why?
+
+     Cache performance can often be optimized by allocating an efficient
+     amount of memory based on the amount of data being stored. This can be
+     done by varying the number of lines and the block size of each line.
+     However, if you then change the amount of data being stored (by changing
+     the array size) then the cache will no longer be optimized for the data
+     being stored, thus reducing performance dramatically.
+
+Block sizes
+-----------
+
+In this section, assume that the total size of the cache we can build
+is fixed, but that we get to make choices as to whether to have
+fewer lines with bigger blocks, or more lines with smaller.
+
+Q2a  Are bigger blocks always better? Worse? Assuming the total size
+     of the cache remains the same, and for an application like
+     testcachesim, which block size is best?
+
+     For this test model, having a larger block size is better than more
+     lines. This is because we are only accessing each element once before
+     moving onto the next element. Therefore, it is more efficient to store
+     larger chunks (larger block size) a few times than to store smaller
+     chunks (more lines) a bunch of times. More lines requires more evicitions
+     and will result in more misses so larger block size is better.
+
+Q3.  Would your answer be different for teststride than it was for
+     testcachesim?  Why?
+
+     For teststride, bigger blocks will not always be better. To optimize
+     a cache using stride, it is important to know the stride size and
+     then use that to find the best block size. Ideally, you want a block size
+     that has to evict blocks as little as possible.
+
+Writing data
+------------
+
+Q4.  Reread the part of the instructions that explains the
+     "Reads_for_writes" count in your cache statistics. Is there a
+     value of the block size that will make "Reads_for_writes" zero?
+     If you understand this, then you understand a lot about how
+     "store-in" caches work.
+
+     Reads_for_writes will be 0 when the block size is 4. This is because
+     if you are accessing any block for writing, you will be clearing the
+     whole block. This means there is no need to read bytes that you will
+     not be writing to so Reads_for_writes will be 0.
+
+Q5.  Explain why, for applications that update memory repeatedly, a cache that
+     performs better may finish with more dirty blocks than a cache
+     that does not perform well on the same application.
+
+     Because we are performing more memory updates / changes in the first
+     program, we will be updating the blocks in the cache more frequently.
+     If the memory management is efficient, it will keep data stored in the
+     cache for some time rather than evicting data all the time. Because of
+     this management style, there is more potential for data that isn't
+     written back to the memory, which by definition is dirty ;)
+
+=================================================================
+                     Associative caches
+=================================================================
+
+Q6.  Can you describe a situation in which a fully associative cache
+     will outperform a direct-mapped cache?
+
+     If you were repeatedly using / dealing with data of different types
+     (integers, characters, strings, etc), it would be more efficient to use
+     a fully associative cache because these allow for flexibility in
+     placement of data, regardless of data type. A direct-mapped cache doesn't
+     allow this so it is more rigid in use and placement of data.
+
+Submit this file using script
+
+       submit40-lab-strides

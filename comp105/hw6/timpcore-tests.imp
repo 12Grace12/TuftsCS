@@ -1,0 +1,19 @@
+(define (array (array int)) matrix-helper ((int length) ((array (array int)) a) (int i))
+    (begin
+        (set a (array-make length (array-make 0 0)))
+        (set i 0)
+        (while (< i length)
+            (begin
+                (array-set a i (array-make length 0))
+                (set i (+ i 1))))
+        a))
+
+(define (array (array int)) matrix ((int length))
+    (matrix-helper length (array-make 0 (array-make 0 0)) 0))
+
+(val a (matrix 3))
+
+
+(define int add1 ((int x)) (+ x 1))
+(add1 (+ 3 5))
+(add1 (< 3 5))

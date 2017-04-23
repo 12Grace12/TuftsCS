@@ -1,0 +1,5 @@
+Programming Technique : test files
+   Write test files and proper output for for those files before writing code.
+   This way you will write the output based on how you know the program is
+   supposed to work as opposed to with the way in which your written program
+   functions in mind.

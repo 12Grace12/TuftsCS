@@ -1,0 +1,60 @@
+#include <iostream>
+
+/* 
+     3wordsort.cpp -- program to print out three words in alpha order
+
+     usage: ./3wordsort
+     input: three words
+    output: the three words in alphabetical order, separated by spaces
+      note: Do not prompt the user; Do not print explanations on output.
+            In fact, don't modify main().
+    
+    modified by: yourname here
+    modified on: date of completion
+ */
+
+using namespace std;
+
+void printInOrder(string s1, string s2, string s3);
+
+int main()
+{
+	string	w1, w2, w3;		// input values
+	
+	cin >> w1 >> w2 >> w3;		// read in three values
+	printInOrder(w1, w2, w3);	// function does not return anything
+
+	return 0;
+}
+
+//
+// printInOrder() prints out the three words in alpha order
+//		  with spaces between them, no return value
+//
+
+void printInOrder(string x, string y, string z)	
+{
+
+    if ((x <= y) && (x <= z)){ // checks if x is the first
+        cout << x << ' ';
+        if (y < z){ // checks if y comes before z
+            cout << y << ' ' << z << endl;
+        } else {
+            cout << z << ' ' << y << endl;
+        }
+    } else if ((y <= x) && (y <= z)){ // checks if y comes first
+        cout << y << ' ';
+        if (x < z){ // checks if x comes before z
+            cout << x << ' ' << z << endl;
+        } else {
+            cout << z << ' ' << x << endl;
+        }
+    } else { // z is the first word
+        cout << z << ' ';
+        if (x < y){ //checks is x comes before y
+            cout << x << ' ' << y << endl;
+        } else {
+            cout << y << ' ' << x << endl;
+        }
+    }
+}

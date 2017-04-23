@@ -1,0 +1,64 @@
+COMP-40 HW #2: ReadMe
+By: Ben Tanen and McKenzie Welter
+
+  In this assignment we implement two abstract data types, UArray2 and Bit2,
+  which represent 2D versions of their 1 dimensional Hanson counterparts.
+  UArray2 is a polymorphic data type, allowing any type of element to be
+  stored in it.
+
+  UArray2 was used to implement a Sudoku Puzzle checker, that checks for
+  completeness of the puzzle (ensuring that each column, row, and box of the
+  puzzle has exactly one of each integer 1-9). It takes in the puzzle in pgm
+  format, all puzzles must have a height, width, and denominator of 9.
+
+  Bit2 was used to implement an edge unblackener, that finds all black edges
+  (defined as black pixels touching an edge of the image file or touching
+  another black edge) and converts those pixels to white. It takes in the
+  image in pbm format, where all pixels are a 1 or a 0.
+
+  Included below is an excerpt from our design checklist with relevant
+  function descriptions for UArray2:
+  " This interface will have a few functions. First, we will use two functions
+    to manage the memory of a UArray2. UArray2_new() will allocate the space for
+    the UArray2 (taking in arguments of width, height, and element size).
+    UArray2_free() will deallocate the memory for a UArray2 after it is used.
+
+    We will also include functions UArray2_width(), UArray2_height(), and
+    UArray2_size() and they will return respectively the width and height of the
+    array(s) and the size of the elements stored in it.
+
+    In order to access the element at a given index, we will include
+    UArray2_at(), which will return a pointer to the element at that index.
+
+    Finally, there will be two functions for mapping the contents of the array.
+    UArray2_map_row_major() will call a passed function (the argument apply())
+    on each element in the array by going through in row then column order.
+    UArray2_map_col_major() will perform the same operation as row_major except
+    in column then row order."
+
+  Included below is an excerpt from our design checklist with relevant
+  function descriptions for Bit2:
+  " This interface will have a few functions. First, we will use two functions
+    to manage the memory of a 2D bit array. Bit2_new() will allocate the space
+    for the Hanson bit array (taking in arguments of width and height). 
+    Bit2_free() will deallocate the memory for a bit array after it is used.
+
+    We will also include functions Bit2_width() and Bit2_height(), and they
+    will return respectively the width and height of the array(s).
+
+    In order to see the bit at a given index, we will include Bit2_get(), which
+    will return the bit value at that index. In order to change the bit at a
+    given index, we will include Bit2_put(), which will change the bit at the 
+    given index to the value passed to _put().
+
+    Finally, there will be two functions for mapping the bits of the array.
+    Bit2_map_row_major() will call a passed function (the argument apply())
+    on each bit in the array by going through in row then column order.
+    Bit2_map_col_major() will perform the same operation as row_major except
+    in column then row order."
+
+  Functions used to read from stdin or the command line were taken and modified
+  from those written for Ben Tanen's introduction homework assignment
+  (brightness.c)
+
+  Approximately 20 Hours Spent 

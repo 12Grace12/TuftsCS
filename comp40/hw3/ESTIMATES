@@ -1,0 +1,58 @@
+# McKenzie Welter and Ben Tanen
+## Assignment 3: Locality and the costs of loads and stores
+### Cache hit rate estimates
+                      row-major access   column-major access   blocked access
+90-degree rotation  |        4         |          5          |        3       |
+180-degree rotation |        1         |          6          |        2       |
+
+Kind of rotation |adds/subs|mults|divs/mods|compares|loads|HR |stores|HR  |
+180 row-major    |    2    |  0  |    0    |   1    |  2  |90%|   2  |100%|
+180 col-major    |    2    |  0  |    0    |   1    |  2  |20%|   2  |100%|
+180 block-major  |    2    |  0  |    2    |   1    |  2  |88%|   2  |100%|
+90  row-major    |    2    |  0  |    0    |   1    |  2  |50%|   2  |100%|
+90  col-major    |    2    |  0  |    0    |   1    |  2  |20%|   2  |100%|
+90  block-major  |    2    |  0  |    2    |   1    |  2  |85%|   2  |100%|
+
+In general, the number of additions, subtractions, multiplications, divisions
+and mods will be near the same. These operations  will be used for indexing of
+the pixels. Block-major access will have slightly more indexing - to find the
+row and column of the block and of the element within the block - but these two
+additional calculations will be relatively insignificant. This leaves the
+efficiency mostly dependent on the storage and retrieval of data in the cache.
+
+Row-major access is efficiently cached for a rotation of 180 degrees because in
+order to swap two rows of the image, only two rows are necessary to access.
+Because elements are stored in row-major order, when one pixel is stored, the
+proceeding pixels that are stored with it in the cache will be used after. This
+leads to fewer misses and evictions and a higher hit rate.
+
+Blocked access 90-degree and 180-degree rotations are the next most efficient
+because whole blocks are stored next to each other in memory, so they can be
+efficiently stored in the cache, and these rotations require two blocks at a
+time. All pixels within those two blocks can be swapped with each other without
+needing to evict and load more blocks, leading to a high hit rate. It is
+marginally faster for 180 degree rotation because, in the event that the
+entirety of the two necessary blocks cannot be stored in the cache, we will
+refer to the speed of a row-major rotation (since the pixels are stored in row-
+major order within the blocks) for which a 180 degree rotation has better
+performance than a 90 degree rotation.
+
+Row major-access is more efficient than column-major access for 90 degree
+because, while you need the whole image in both cases, rows are more
+efficiently stored than columns in the cache. This is because pixels in rows
+are stored in sequential order in memory. 90 degree rotations are always
+inefficient because they need a whole row and a whole column for any given
+pixel's rotation, which is not easy to store in the cache. This will require
+many evictions and result in a lot of misses and a low hit rate.
+
+In general, column-major access is incredibly inefficient because the cache
+will never work in the favor of our program. Pixels will be accessed with a lot
+of other useless data, due to their placement in memory far from the other
+pixels in their column.
+
+Column-major access for a 180 degree rotation is least efficient of all access
+methods because the pixels in a given column are not stored next to each other
+in memory. Therefore, an entire column cannot be stored in the cache. Instead,
+each pixel will be stored in the cache with the surrounding unnecessary data,
+and all the data will need to be evicted after each pixel rotation, yielding a
+low hit rate.

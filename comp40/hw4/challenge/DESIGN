@@ -1,0 +1,172 @@
+Assignment #4: Arith
+Ben Tanen, Julia Moyer
+Design Document, 02/20/15
+
+ Architecture
+ ------------
+ Our overall design will be broken up into four modules
+ that will be used to perform both our compression and decompression.
+
+ Our compression algorithm and process is made up of three main parts, which 
+ are then broken down into smaller sub-parts. 
+ 1. The first step is reading in the file and converting the file to the
+    appropriate data type (Pnm_ppm). We will do this using the
+    ppm_compression_io module, which has the ability to read / convert ppm.
+ 2. Next, we will trim the image so that is has an even height and width using
+    the ppm_trim function. This will return a new 2d array that has the
+    appropriate height and width, which will be stored in our Pnm_ppm.
+ 3. Next, we will transform the original pixel values into code words through a
+    series of transformations that will be contained through our block-major
+    mapping apply function, compress_pixel_block (these blocks will be 2-by-2).
+    NOTE: throughout this whole compress_pixel_block function, we will maintain
+          a closure struct that will contain:
+          - an iterator (i): this iterator will keep track of distinct blocks.
+            Once it has been determined the end of a block has been reached,
+            specific calculations will be done (part b & c). 
+          - a running sum of the Pr values (sum_Pr): see use in part b
+          - a running sum of the Pb values (sum_Pb): see use in part b
+          - a struct of the four Y values (Y_values): see use in part c
+    a. The first step of this process will be converting the individual pixels 
+       from RGB format to component video format. In order to do this, we will
+       use our rgb_component_conversion module on each pixel, calling
+       the rgb_to_comp functions (r,g,b). These component video values (Y,Pr,
+       Pb) will be added to running calculations kept in a closure for parts 
+       (b) & (c) (see below for more information).
+    b. Once it has been determined that we have reached the end of a 2-by-2
+       block (using the iterator in the struct), we will find the average Pr & 
+       Pb values and pass these values to the index_of_chroma function (from 
+       the provided arith40 module) to get the index of these chroma values.
+    c. Next, we will pass the four Y values (from our struct Y_values) into our
+       discrete cosine function discr_cos() from our discrete_cosine module. By
+       doing this, we will obtain the four cosine coefficients (a,b,c,d), which
+       are used in part (d).
+    d. Once the two chroma index values and four cosine coefficients are
+       calculated, we can pass these six values into our bitpack_new functions 
+       (from the bitpack module) in order to construct our 32-bit code word.
+    e. Next, we will call print_codeword (passing the codeword from part d) 
+       from our ppm_compression_io module, printing out the individual code
+       words for each 2-by-2 pixel block.
+
+ Our decompression algorithm and process is made up of four main parts, which 
+ are then broken down into smaller sub-parts.
+ 1. The first step of decompression will involve reading from header to get 
+    the width & height values (using the provided code in the assignment). We
+    will then calculate a denominator using these values, and then use these 
+    three values to allocate a new 2D array. All of these variables will then
+    be kept in a new Pnm_ppm. All of this reading / calculation will be done
+    through the read_header function of the ppm_compression_io module.
+ 2. The next step will be to read in each of the compressed code words (using
+    the read_codeword function from the ppm_compression_io module) and 
+    decompress them into pixel values to be stored in our 2d array.
+    NOTE: all of step 2 will be contained within a decompress_codeword function
+          that will return a struct of four Pnm_rgb struct types (describing 
+          the four pixels in a 2-by-2 pixel block)
+    a. First, we will unpack the 6 stored variables from our codeword using
+       Bitpack_get from the bitpack module.
+    b. We will pass index(avg.Pr) & index(avg.Pb) into chroma_of_index() 
+       function from the provided arith40 module.
+    c. Next, we will pass our four cosine coefficients into our inv_discr_cos
+       function (from the discrete_cosine module), which will return the four
+       Y values (brightnesses of the four pixels in our block).
+    d. We will then convert these values into four RGB pixels (which we will 
+       use to form our 2-by-2 pixel blocks) using the comp_to_rgb functions 
+       from the rgb_component_conversion module.
+ 3. For each of the Pnm_rgb pixel structs, we will then calculate their
+    relative location in our 2d array (based on which word they came from,
+    see below) and store these pixels in our 2d array using store_pixels().
+    Eqns: col = ((nth-word)(2) % (width)) + (adjustment)
+          row = ((nth-word)(2) / (width)) + (adjustment)
+    NOTE: the adjustment will be either 0 or 1 to account for position of the
+          individual pixels within the block. 
+ 4. After reading all of the codewords, we will print the decompressed Pnm_ppm 
+    using the print_ppm function from our ppm_compression_io module.   
+
+
+ Modules
+ -------    
+ Our program will be broken up into four modules that will be used throughout
+ our compression and decompression.
+ 1. ppm_compression_io: this module holds all of the functions associated with
+    writing and reading our images and codewords. Contained within the module
+    are the ~secrets~ of writing and interpreting input and output.
+ 2. bitpack: this module holds the ~secrets~ associated with interpreting and
+    storing information within our codewords. This is done by using binary 
+    arithmetic and knowledge of bit manipulation in order to extract info
+    from codewords. Contained within this module are functions to check size,
+    create words, and retrieve information for both signed and unsigned integer
+    types. 
+ 3. rgb_component_conversion: this module contains the 6 functions in order to
+    convert from rgb format to component video format (and back). Within these
+    functions are the equations necessary to convert and thus the module
+    contains the ~secrets~ (equations) needed for conversion. 
+ 4. discrete_cosine: this module contains the 2 functions used for discrete 
+    cosine calculations (regular and inverse). Within these functions are the
+    equations necessary for discrete cosine and inverse discrete cosine and 
+    thus the module contains the ~secrets~ (equations) of these calculations.
+
+
+ Testing
+ -------
+ We will test our program systematically as we write it. We will have three
+ stages of testing:
+
+ 1. Test individual modules:
+    Once a module is fully implemented, we will test each module using a
+    separate main function. We will test these individual programs with
+    known values to determine if our outputs are correct.
+    a. ppm_compression_io: we will make a new main file to test the inputs
+       and outputs of the functions in our module. We will read in an image,
+       then print out the image and use our ppmdiff program to make sure that
+       the difference is none.
+    b. rgb_component_conversion: to test these functions, we can convert from
+       rgb to component and then convert back to make sure that we obtain the
+       initial starting values. We can also do this testing the other way 
+       (component to rgb).
+    c. discrete_cosine: to test these two functions, we can apply the discrete
+       cosine function on our four Y values to obtain the cosine coefficients 
+       (a,b,c,d) and then use the inverse function to get back our original Y
+       values. We will test to make sure that this operation / inverse acts as
+       expected.
+    d. bitpack: to test this module, we will use our new and get functions to 
+       store information in codewords and then attempt to retrieve the same
+       information after the fact. If the obtained information is the same as 
+       the original, the new and get functions work appropriately. We can do 
+       simple manual testing for fits to make sure that they report the correct
+       boolean.
+ 2. Test step-wise format:
+    For each component we integrate into our program, we will partially 
+    compress and decompress an image and use our ppm_diff test program to 
+    compare input and output images for similarity. We will integrate and
+    test our modules / whole program in this order: ppm_compression_io,
+    rgb_component_conversion, discrete_cosine, bitpack. 
+ 3. Test whole program:
+    Once each component has been fully integrated into our program, we will
+    test the program as a whole for completion.
+ 
+
+ How will our design help with challenge problem?
+ ------------------------------------------------
+ We have designed our program to be as modular as possible. We will have to 
+ modify the arguments we pass to the bitpack functions in compress_pixel_block 
+ and decompress_codeword order to accomodate the new codeword format but these 
+ changes should only affect a few lines of code.
+
+
+ Identify all the places information can be lost:
+ ------------------------------------------------
+ - We will lose colors outside of +/-0.3 range when we quantize in
+   compression. 
+ - We will have larger clusters of the same color beacuse we are using
+   the average chroma in a 2-by-2 block.
+ - We will not have a continuous range of colors because quantizing will
+   return rounded numbers. 
+ - We will lose one row or col if either are odd before we trim the
+   image.
+ - If the image were to again be compressed and decompressed, we wouldn't 
+   expect to see any more notable information loss. This is because the above 
+   four points of data-loss will only be affected by the first round of 
+   compression / decompression (avg values will maintain, will not have to 
+   quantize outside +/-0.3, etc) so any subsequent rounds of compression / 
+   decompression would not affect the image's data. The only loss we might see 
+   would come from casting integers to floats and floats to integers in rgb to 
+   component (and back) conversion, but this would be minor.

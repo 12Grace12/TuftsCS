@@ -1,0 +1,45 @@
+This is bomb 9 for lab comp40spring15.
+
+It is owned by the following student(s):
+Benjamin Tanen (benjamin.tanen@tufts.edu)
+Rebecca Larson (rebecca.larson@tufts.edu)
+
+Description of Phases:
+----------------------
+Phase 1 - This phase compares the input string to a predefined string. In this
+example, the string was "Elementary, my dear Watson." If the strings are not 
+equal, the bomb explodes.
+
+Phase 2 - This phase reads in a string of 6 numbers and puts them in an array.
+It then checks that the 1st and 4th, 2nd and 5th, and 3rd and 6th elements are 
+equal. If they are not, the bomb explodes.
+
+Phase 3 - This phase reads in a string of two numbers. It makes sure the first 
+number is less than or equal 5 (if it is greater, the bomb explodes). Then it
+it sets a comparison value based on the first number. It then makes sure the
+comparison value and the second number from the input are equal. If they are
+not, the bomb explodes.
+
+Phase 4 - This phase reads in a string of one number which describes a power. 
+It then calculates the value of 7^(power) (using func4()) and checks if it is 
+equal to 49. If it is not, the bomb explodes.
+
+Phase 5 - This phase reads in a string of one number that is 6 digits long. 
+The phase uses each of the 6 digits as an index for a predefined global array. 
+The value that is returned from the array is then added to a running sum. If 
+the value of the running sum after all 6 digits are used is not 57, the bomb 
+explodes.  
+
+Phase 6 - This phase sorts a linked list of 10 nodes in descending order based
+on the values that each node holds (this is done in fun6()). It then compares
+the value of the 7th node (in order) with the value that is passed in to 
+phase_6. If the two values are not equal, the bomb explodes.
+
+Secret Phase - This phase takes in a single number (as a string) and checks if
+the value exists in a pre-existing binary search tree. It calls the function
+fun7() to search the tree. If the value doesn't exist, it explodes the bomb.
+
+All work / code written for defusal done by Rebecca Larson and Ben Tanen. The
+complete defusal (including secret phase) took 17 hours.
+
+

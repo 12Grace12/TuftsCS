@@ -1,0 +1,98 @@
+Assignment #4: README (2/25/15)
+Ben Tanen, Julia Moyer
+
+Hours spent analyzing problems: 5
+Hours spent solving problem: 25
+
+All aspects of our program have been implemented correctly. Some artifacting may
+occur, but this is because of the nature of compression and decompression 
+algorithms.
+
+Architecture: Our architecture is broken up into two parts (compression / 
+              decompression) and the parts use 4 distinct modules (see below).
+
+ Our compression algorithm and process is made up of three main parts, which 
+ are then broken down into smaller sub-parts. 
+ 1. The first step is reading in the file and converting the file to the
+    appropriate data type (Pnm_ppm). We do this using the
+    ppm_compression_io module, which has the ability to read / convert ppm.
+ 2. Next, we trim the image so that is has an even height and width using
+    the ppm_trim function. This returns a new 2d array that has the
+    appropriate height and width, which is stored in our Pnm_ppm.
+ 3. Next, we transform the original pixel values into code words through a
+    series of transformations that is contained through our block-major
+    mapping using the function, compress_pixel (these blocks are 2-by-2).
+    NOTE: throughout this whole compress_pixel function, we maintain
+          a closure struct that contains:
+          - a running sum of the Pr values (sum_Pr): see use in part b
+          - a running sum of the Pb values (sum_Pb): see use in part b
+          - a struct of the four Y values (Y_values): see use in part c
+    a. The first step of this process is converting the individual pixels 
+       from RGB format to component video format. In order to do this, we use 
+       our rgb_component_conversion module on each pixel, calling
+       the rgb_to_comp functions (r,g,b). These component video values (Y,Pr,
+       Pb) are added to running calculations kept in a closure for parts 
+       (b) & (c) (see below for more information).
+    b. Once it has been determined that we have reached the end of a 2-by-2
+       block (using the passed iterator), we find the average Pr & 
+       Pb values and pass these values to the index_of_chroma function (from 
+       the provided arith40 module) to get the index of these chroma values.
+    c. Next, we pass the four Y values (from our struct Y_values) into our
+       discrete cosine function discr_cos() from our discrete_cosine module. By
+       doing this, we obtain the four cosine coefficients (a,b,c,d), which
+       are used in part (d).
+    d. Once the two chroma index values and four cosine coefficients are
+       calculated, we can pass these six values into our bitpack_new functions 
+       (from the bitpack module) in order to construct our 32-bit code word.
+    e. Next, we call print_codeword (passing the codeword from part d) 
+       from our ppm_compression_io module, printing out the individual code
+       words for each 2-by-2 pixel block.
+
+ Our decompression algorithm and process is made up of four main parts, which 
+ are then broken down into smaller sub-parts.
+ 1. The first step of decompression involves reading from header to get 
+    the width & height values (using the provided code in the assignment). We
+    then calculate a denominator using these values, and then use these 
+    three values to allocate a new 2D array. All of these variables are then
+    kept in a new Pnm_ppm. All of this reading / calculation is done
+    through the read_header function of the ppm_compression_io module.
+ 2. The next step is to read in each of the compressed code words (using
+    the read_codeword function from the ppm_compression_io module) and 
+    decompress them into pixel values to be stored in our 2d array.
+    NOTE: all of step 2 is contained within a decompress_codeword function
+          that returns a struct of four Pnm_rgb struct types (describing 
+          the four pixels in a 2-by-2 pixel block)
+    a. First, we unpack the 6 stored variables from our codeword using
+       Bitpack_get from the bitpack module.
+    b. We pass index(avg.Pr) & index(avg.Pb) into chroma_of_index() 
+       function from the provided arith40 module.
+    c. Next, we pass our four cosine coefficients into our inv_discr_cos
+       function (from the discrete_cosine module), which returns the four
+       Y values (brightnesses of the four pixels in our block).
+    d. We then convert these values into four RGB pixels (which we 
+       use to form our 2-by-2 pixel blocks) using the comp_to_rgb functions 
+       from the rgb_component_conversion module.
+ 3. For each of the Pnm_rgb pixel structs, we then calculate their
+    relative location in our 2d array (based on which word they came from,
+    see below) and store these pixels in our 2d array using store_pixels().
+    Eqns: col = ((nth-word)(2) % (width)) + (adjustment)
+          row = ((nth-word)(2) / (width)) + (adjustment)
+    NOTE: the adjustment is either 0 or 1 to account for position of the
+          individual pixels within the block. 
+ 4. After reading all of the codewords, we print the decompressed Pnm_ppm 
+    using the print_ppm function from our ppm_compression_io module.   
+
+
+ Modules
+ -------    
+ Our program is broken up into four modules that are used throughout
+ our compression and decompression.
+ 1. ppm_compression_io: This module holds all of the functions associated with
+    writing and reading our images and codewords. 
+ 2. bitpack: Contained within this module are functions to check size,
+    create words, and retrieve information for both signed and unsigned integer
+    types. 
+ 3. rgb_component_conversion: This module contains the 6 functions in order to
+    convert from rgb format to component video format (and back). 
+ 4. discrete_cosine: This module contains the 2 functions used for discrete 
+    cosine calculations (regular and inverse).

@@ -1,0 +1,100 @@
+"Analyze" Function
+purpose: this function is the "brains" of the program. It feeds
+         to other functions that analyze the plate and determine/output
+         the numbers (and their location) on the plate
+arguments: takes in the plate[] array (char) and the digs[] array (char)
+returns: nothing
+effects: feeds to other functions that output the location of the
+         plate's numbers
+note: this is the overall parent function. Feeds to all below functions
+      (either directly or indirectly)
+
+
+"Print Plate" Function
+purpose: this function prints out each character in the plate[] array
+         in turn, which ultimatly prints the plate as a whole
+arguments: takes in the plate[] array (char)
+returns: nothing
+effects: prints out the given plate
+note: this is primarily used for testing purposes
+
+
+"Analyze Cell" Function
+purpose: once a "#" is found and it is determined that the cell is
+         not in the no_test[] array, this function uses the number-
+         analysis and point-analysis functions to decide a given
+         character is
+arguments: takes in the plate[] array (char), the location of the "#"
+           (col, row (int)), the results[] array (int), the no_test[] 
+           array (int), and the digs[] array (char)
+returns: nothing
+effects: nothing (see note)
+note: this function itself does nothing, but it does lead to other
+      functions (store_results, make_no_test) that modify the
+      results[] and no_test[] array
+
+
+"Print Result" Function
+purpose: this function takes in the results[] array and prints out
+         the number and its location in the designated format
+arguments: takes in the results[] array (int)
+returns: nothing (prints results)
+effects: this prints out the results from the results[] array
+note: if the number is unknown it returns a -1
+
+
+"Store Result" Function
+purpose: this function takes in the determined identity of a number and
+         its location and adds these to the results array that is used
+         at the end
+arguments: takes in the known identity of the number (int), the location
+           (int for col/row), and the results[] array
+returns: nothing (modifies result[])
+effects: this adds the number and the location of the number to the 
+         result[] array
+notes: none
+
+
+"Make No Test" Function
+purpose: this function takes in the below arguments and adds points to
+         the no_test array that is used to determine if the analyze
+         function should analyze a found point
+arguments: the known identify of the found number (int), the location
+           of the top left corner (int col/row), the no_test[] array (int)
+           and the digs[] array
+returns: nothing (modifies no_test[])
+effects: this adds certain point/locations to the no_test[] array
+         after it is determined these are part of the known number
+notes: none
+
+
+"Should Test" Test
+purpose: this function is given a particular point and then
+         searches through the no_test[] array to determine
+         if it should be tested
+arguments: integers for row and col (describing the point)
+           and the no_test[] array
+returns: true or false
+effects: no modifications
+notes: none
+
+
+Number Analysis Functions
+purpose: the following 10 functions use the point-analysis functions
+         below to determine the identity of the unknown number
+         on the plate
+arguments: the plate array, integers for the col,row value
+returns: true or false
+effects: no modifications
+note: this describes the functions is_1(), is_2(), ... is_9(), is_0()
+
+
+Point Analysis Functions
+purpose: these functions deteremine (bool) if there is '#' located
+         at different points (top-middle, center, etc) based on
+         a given (row,col) point
+arguments: the plate array, integers for the col,row value
+returns: true or false
+effects: no modifications
+note: this describes the next seven functions
+note: this descirbes the functions pt_mbl(), pt_ctr(), etc.

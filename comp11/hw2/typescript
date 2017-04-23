@@ -1,0 +1,53 @@
+Script started on Thu 23 Jan 2014 09:30:47 PM EST
+~/Desktop/comp11/hw2 > hot[Kstname
+dell24
+~/Desktop/comp11/hw2 > who
+mtran04  pts/1        2014-01-23 20:47 (10.245.140.200)
+nr       pts/4        2014-01-23 13:41 (pool-108-7-213-75.bstnma.fios.verizon.net)
+nepste01 pts/7        2014-01-23 19:21 (resnet136-235.medford.tufts.edu)
+bnodel01 pts/9        2014-01-23 20:55 (wr-130-64-184-42.medford.tufts.edu)
+jwrigh07 pts/10       2014-01-23 18:47 (209-6-95-187.c3-0.smr-ubr1.sbo-smr.ma.cable.rcn.com)
+sdrew02  pts/15       2014-01-23 21:22 (resnet143-151.medford.tufts.edu)
+ahotal01 pts/16       2014-01-23 20:56 (wr-130-64-187-209.medford.tufts.edu)
+amurra05 pts/17       2014-01-23 20:58 (wr-130-64-98-120.medford.tufts.edu)
+scampe01 pts/12       2014-01-23 20:27 (localhost:17.0)
+yjun01   pts/14       2014-01-23 20:17 (38.122.127.226)
+jpfosi01 pts/18       2014-01-23 21:05 (wr-130-64-185-49.medford.tufts.edu)
+jgirso01 pts/19       2014-01-23 21:25 (resnet153-27.medford.tufts.edu)
+tpolla01 pts/22       2014-01-23 19:07 (wr-130-64-94-15.medford.tufts.edu)
+ejp      pts/23       2014-01-22 12:22 (stella.eecs.tufts.edu)
+btanen01 pts/25       2014-01-23 21:25 (wr-130-64-218-33.medford.tufts.edu)
+jgirso01 pts/26       2014-01-23 21:26 (resnet138-25.medford.tufts.edu)
+smckee01 pts/27       2014-01-23 19:46 (resnet143-39.medford.tufts.edu)
+btanen01 pts/28       2014-01-23 21:30
+~/Desktop/comp11/hw2 > w
+ 21:30:57 up 152 days, 10:50, 20 users,  load average: 1.05, 0.92, 1.00
+USER     TTY      FROM              LOGIN@   IDLE   JCPU   PCPU WHAT
+mtran04  pts/1    10.245.140.200   20:47    2:39   0.10s  0.10s -tcsh
+nr       pts/4    pool-108-7-213-7 13:41    3:04m  0.76s  0.76s slogin labrador
+nepste01 pts/7    resnet136-235.me 19:21   43.00s  0.24s  0.16s -tcsh
+bnodel01 pts/9    wr-130-64-184-42 20:55    3.00s  0.09s  0.09s -tcsh
+jwrigh07 pts/10   209-6-95-187.c3- 18:47   49:02   0.40s  0.23s emacs poop.c
+sdrew02  pts/15   resnet143-151.me 21:22    7:53   0.08s  0.08s -tcsh
+ahotal01 pts/16   wr-130-64-187-20 20:56    4.00s  0.10s  0.10s -tcsh
+amurra05 pts/17   wr-130-64-98-120 20:58   23:22   0.08s  0.08s -tcsh
+scampe01 pts/12   localhost:17.0   20:27    9:52   0.04s  0.04s -bin/tcsh
+yjun01   pts/14   38.122.127.226   20:17    1:11m  0.58s  0.51s emacs digits.cp
+jpfosi01 pts/18   wr-130-64-185-49 21:05   23:09   0.24s  0.16s vim ex8test.ic
+jgirso01 pts/19   resnet153-27.med 21:25    2:13   0.09s  0.09s -tcsh
+tpolla01 pts/22   wr-130-64-94-15. 19:07    0.00s  0.36s  0.07s gdb ./fgroups
+ejp      pts/23   stella.eecs.tuft Wed12   33:07m  0.03s  0.03s -bash
+btanen01 pts/25   wr-130-64-218-33 21:25    0.00s  0.10s  0.00s script
+jgirso01 pts/26   resnet138-25.med 21:26   25.00s  0.74s  0.10s -tcsh
+smckee01 pts/27   resnet143-39.med 19:46   16.00s  2.10s  0.11s -tcsh
+btanen01 pts/28   -                21:30    0.00s  0.16s  0.13s w
+~/Desktop/comp11/hw2 > pwd
+/h/btanen01/Desktop/comp11/hw2
+~/Desktop/comp11/hw2 > ls - l
+total 4
+-rw-------. 1 btanen01 other 618 Jan 23 21:29 digits.cpp
+-rw-------. 1 btanen01 other   0 Jan 23 21:30 typescript
+~/Desktop/comp11/hw2 > exit
+exit
+
+Script done on Thu 23 Jan 2014 09:31:05 PM EST

@@ -1,0 +1,384 @@
+.section init
+        // register r0 is set to zero for the entirety of the program and used
+        // to access the jumptable in segment 0
+        .zero r0        
+
+        // register r2 is used for the value stack pointer, set in stacks.ums
+        // (this is assumed throughout the entirety of the program)
+        // registers r3, r4, and r5 are general purpose registers
+        // registers r6 and r7 are temporary registers 
+        .temps r6, r7
+        
+.section rodata
+        // jumptable used to hold 'switch' statement options based on 256
+        // possible character inputs
+        // redirects to correct operation to execute 
+        jumptable:
+        .space 256
+
+.section init
+// initalize r5 to zero for init_jumptable loop (to 256)
+r5 := 0
+
+// iterates through jumptable (0 -> 256) and sets all values to 'input_error'
+// label
+init_jumptable:
+        // r5 holds iterator for loop
+        if (r5 >=s 256) goto set_jumptable using r1
+
+        // use r3 to hold location in segment 0 to set to 'input_error'        
+        r3 := jumptable + r5
+        m[r0][r3] := input_error
+        r5 := r5 + 1
+        goto init_jumptable
+
+// when done with initalizing jumptable to 'input_error', sets allowed
+// characters to labels corresponding to operation
+set_jumptable:
+        // initalize r3 for loop as iterator
+        r3 := '0'
+
+        // loops to set all digits in jumptable to correct label
+        digit_loop:
+                // use r4 to hold location in segment to set to 'digit'
+                r4 := jumptable + r3
+                m[r0][r4] := digit
+                r3 := r3 + 1
+                if (r3 >s 57) goto set_ops using r1
+                goto digit_loop
+
+        // sets all non-digit allowed characters to corresponding label to
+        // jump to
+        set_ops:
+                m[r0][jumptable + ' '] := waiting
+                m[r0][jumptable + '\n'] := newline
+                m[r0][jumptable + '+'] := addition
+                m[r0][jumptable + '-'] := subtraction
+                m[r0][jumptable + '*'] := multiplication
+                m[r0][jumptable + '/'] := division
+                m[r0][jumptable + '|'] := bitwise_or
+                m[r0][jumptable + '&'] := bitwise_and
+                m[r0][jumptable + 'c'] := change_sign
+                m[r0][jumptable + '~'] := bitwise_complement
+                m[r0][jumptable + 's'] := swap_val
+                m[r0][jumptable + 'd'] := duplicate
+                m[r0][jumptable + 'p'] := pop_stack
+                m[r0][jumptable + 'z'] := zero_stack
+
+                goto waiting
+
+.section text
+// operation associated with when user inputs invalid character
+// assumed that r1 holds character input from user (in waiting / entering)
+// outputs error message, specifying invalid character used
+input_error:
+        output "Unknown character '"
+        output r1
+        output "'\n"
+        goto waiting
+
+// reads in character input, makes sure input not EOF, and jumps to appropriate
+// jumptable operation
+waiting:
+        // r1 holds input character
+        r1 := input()
+ 
+        // check if EOF (EOF is most negative value so ~EOF == 0)
+        // r3 holds complement of input char r1
+        r3 := ~r1
+        if (r3 == 0) goto terminate
+
+        // jump to jumptable operation
+        jumptable_go:
+                // r5 holds location to jump to (from jumptable then segment 0)
+                r5 := jumptable + r1
+                r5 := m[r0][r5]
+                goto r5
+
+// reads in character input, makes sure input not EOF, and jumps to appropriate
+// jumptable operation (if non-digit character) or combines digit if non-first
+// digit entered
+entering:
+        // r1 holds input character
+        r1 := input()
+        
+        // check if EOF (EOF is most negative value so ~EOF == 0)
+        // r3 holds complement of input char r1
+        r3 := ~r1 
+        if (r3 == 0) goto terminate
+
+        // check if digit
+        if (r1 <s '0') goto jumptable_go using r3 
+        if (r1 >s '9') goto jumptable_go using r3
+        goto combine_digit
+
+// operation called when EOF read in, simply halts execution
+terminate:
+        halt 
+
+// pushes read-in digit onto stack
+// assumes r1 is the ascii value of most recent read-in character
+digit:
+        // r3 holds numeric value of read-in character
+        r3 := r1 - 48
+
+        // r2 holds main value stack
+        push r3 on stack r2
+        goto entering 
+
+// pops previously read-in number and combines with most recent digit for
+// the purpose of storing multiple digit numbers
+// assumes r1 is the ascii value of the most recent read-in character
+combine_digit:
+        // r3 holds last loaded number from value stack r2
+        pop r3 off stack r2
+
+        // operations to extend number to include newest digit
+        r3 := r3 * 10
+        r3 := r3 + r1
+        r3 := r3 - 48
+
+        push r3 on stack r2
+        goto entering 
+
+// case 1: desired two numbers, none on stack
+// explains to user that not enough numbers were on the value stack
+stack_underflow_c1:
+        output "Stack underflow---expected at least 2 elements\n"
+        goto waiting
+
+// case 2: desired two numbers, only one on stack
+// explains to user that not enough numbers were on the value stack
+// assumed r4 holds last popped value from stack (reloads onto stack)
+stack_underflow_c2:
+        push r4 on stack r2
+        output "Stack underflow---expected at least 2 elements\n"
+        goto waiting
+
+// case 3: desired one number, none on stack
+// explains to user that not enough numbers were on the value stack
+stack_underflow_c3:
+        output "Stack underflow---expected at least 1 element\n"
+        goto waiting
+
+// checks if there is at least one number on the stack to use
+// assumes r1 is return location
+// r4 is set to the top number from the stack
+stack_check_one_num:
+        // frees up temp register for checking
+        .temps r5, r6, r7
+
+        // checks if stack pointer at label, outputs error if so
+        if (r2 == vstack_bottom) goto stack_underflow_c3
+
+        // sets r4 to top number
+        pop r4 off stack r2 
+        .temps r6, r7
+
+        // returns to caller
+        goto r1
+
+// checks if there are at least two numbers on the stack to use
+// assumes r1 is return location
+// r4 is set to the top number from the stack
+// r3 is set to the second top number from the stack
+stack_check_two_num:
+        // frees up temp register for checking
+        .temps r5, r6, r7
+
+        // checks if stack pointer at label, outputs error if so 
+        if (r2 == vstack_bottom) goto stack_underflow_c1
+        pop r4 off stack r2
+
+        // checks if stack pointer at label, outputs error if so
+        if (r2 == vstack_bottom) goto stack_underflow_c2
+        pop r3 off stack r2
+        .temps r6, r7
+
+        // returns to caller
+        goto r1
+
+// pops two values from stack and pushes the sum
+// assumes r3, r4 hold x, y values respectively from stack
+addition:
+        // checks if at least two numbers on stack
+        goto stack_check_two_num linking r1
+
+        // does addition, pushes sum on stack
+        r3 := r3 + r4
+        push r3 on stack r2
+
+        goto waiting
+
+// pops two values from stack and pushes the difference
+// assumes r3, r4 hold x, y values respectively from stack
+subtraction:
+        // checks if at least two numbers on stack
+        goto stack_check_two_num linking r1
+
+        // does subtraction, pushes difference on stack
+        r3 := r3 - r4
+        push r3 on stack r2
+
+        goto waiting
+
+// pops two values from stack and pushes the product 
+// assumes r3, r4 hold x, y values respectively from stack
+multiplication:
+        // checks if at least two numbers on stack
+        goto stack_check_two_num linking r1
+
+        // does multiplication, pushes product on stack
+        r3 := r3 * r4
+        push r3 on stack r2
+
+        goto waiting
+
+// pops two values from stack, checks not dividing by zero, pushes quotient 
+// assumes r3, r4 hold x, y values respectively from stack 
+division:
+        // checks if at least two numbers on stack
+        goto stack_check_two_num linking r1
+
+        // determines if division is special case (divide by zero,
+        // involves negative numbers)
+        if (r4 == 0) goto divide_by_zero 
+        if (r3 <s 0) goto first_negative using r1
+        if (r4 <s 0) goto second_negative using r1
+       
+        // non-special case: does division, pushes quotient on stack
+        // goes back to waiting state 
+        r3 := r3 / r4
+        push r3 on stack r2
+        goto waiting
+
+        // conducts division for special case(s) that the first number
+        // is negative
+        // assumes r3, r4 hold x, y values to perform division on
+        first_negative:
+                // checks if second number is negative (another case)
+                if (r4 <s 0) goto both_negative using r1
+
+                // switches sign of first number, performs positive division, 
+                // switches sign back (in r3), puts quotient back on stack
+                r3 := 0 - r3
+                r3 := r3 / r4
+                r3 := 0 - r3
+                push r3 on stack r2
+                goto waiting
+        
+        // conducts division for special case that the second number
+        // is negative
+        // assumes r3, r4 hold x, y values to perform division on
+        second_negative:
+                // switches sign of second number (in r4), performs positive 
+                // division, switches sign back (in r3), puts quotient on stack
+                r4 := 0 - r4
+                r3 := r3 / r4
+                r3 := 0 - r3
+                push r3 on stack r2
+                goto waiting
+
+        // conducts division for special case that both numbers are negative
+        // assumes r3, r4 hold x, y values to perform division on
+        both_negative:
+                // converts sign of both numbers (in r3 and r4)
+                // performs positive division (in r3), puts quotient on stack
+                r4 := 0 - r4
+                r3 := 0 - r3
+                r3 := r3 / r4
+                push r3 on stack r2
+                goto waiting 
+
+        // reports error when specified to divide by 0
+        // pushes value back on stack, notifies user
+        // assumes r3, r4 hold x, y values
+        divide_by_zero:
+                push r3 on stack r2
+                push r4 on stack r2
+                output "Division by zero\n"
+                goto waiting
+
+// pops two values from stack, perform 'bitwise or' on x & y 
+// assumes r3, r4 hold x, y values respectively from stack
+bitwise_or:
+        // checks if at least two numbers on stack
+        goto stack_check_two_num linking r1
+
+        // performs bitwise-or (in r3) and pushes onto stack
+        r3 := r3 | r4
+        push r3 on stack r2
+
+        goto waiting
+
+// pops two values from stack, perform 'bitwise and' on x & y 
+// assumes r3, r4 hold x, y values respectively from stack
+bitwise_and:
+        // checks if at least two numbers on stack
+        goto stack_check_two_num linking r1
+
+        // performs bitwise-and (in r3) and pushes onto stack
+        r3 := r3 & r4
+        push r3 on stack r2
+
+        goto waiting
+
+// pops one value from stack, switches sign and pushes to stack
+// assumes r4 holds x value to perform switch
+change_sign:
+        // checks if at least one number on stack
+        goto stack_check_one_num linking r1
+
+        // performs sign change (in r4) and pushes onto stack
+        r4 := 0 - r4
+        push r4 on stack r2
+
+        goto waiting
+
+// pops one value from stack, performs bitwise-complement and pushes to stack
+// assumes r4 holds x value to perform bitwise complement
+bitwise_complement:
+        // checks if at least one number on stack
+        goto stack_check_one_num linking r1
+        
+        // performs bitwise complement (in r4) and pushes onto stack
+        r4 := ~r4
+        push r4 on stack r2
+
+        goto waiting
+
+// pops two values from stack, pushes them back onto stack in reverse order
+// assumes r3, r4 holds x, y values to perform switch
+swap_val:
+        // checks if at least two numbers on stack
+        goto stack_check_two_num linking r1
+
+        // pushes y (from r4) then x (from r3) back onto stack
+        push r4 on stack r2
+        push r3 on stack r2
+
+        goto waiting
+
+// pops one value from stack, pushes it back onto stack twice
+// assumes r4 holds y value to duplicate
+duplicate: 
+        // checks if at least one number on stack
+        goto stack_check_one_num linking r1
+
+        // pushes y value (from r4) onto stack twice
+        push r4 on stack r2
+        push r4 on stack r2
+
+        goto waiting
+
+// pops one value from stack permanently
+pop_stack:
+        // checks if at least one number on stack
+        goto stack_check_one_num linking r1 
+        goto waiting
+
+// removes all values from stack
+zero_stack:
+        // reset r2 to top bottom
+        r2 := vstack_bottom
+        goto waiting

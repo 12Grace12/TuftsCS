@@ -1,0 +1,10 @@
+(foo ()
+    (set x 1)
+)
+
+(bar ()
+    (begin
+        (foo)
+        x
+    )
+)

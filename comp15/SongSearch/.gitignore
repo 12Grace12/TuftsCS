@@ -1,0 +1,9 @@
+// Original Assignment Files
+*.html
+*.pdf
+
+// dSYM Files
+*.dSYM
+
+// Database Files
+*.txt

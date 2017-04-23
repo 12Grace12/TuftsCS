@@ -1,0 +1,213 @@
+COMP-40 HW #2 iii - Design
+By: Ben Tanen and McKenzie Welter
+
+This document includes two different designs: one for UArray2 (a 2D UArray) and
+one for Bit2 (a 2D array of bits).
+
+Design #1: UArray2
+
+1. What is the abstract thing you are trying to represent? Often the answer will
+   be in terms of sets, sequences, and finite maps.
+
+   In this interface, we will be representing a two-dimensional unboxed array.
+   The array will be defined by a width and height given by the user. Elements
+   of the array can then be accessed from the appropriate row / column index.
+
+2. What functions will you offer, and what are the contracts of that those
+   functions must meet?
+
+   This interface will have a few functions. First, we will use two functions
+   to manage the memory of a UArray2. UArray2_new() will allocate the space for
+   the UArray2 (taking in arguments of width, height, and element size).
+   UArray2_free() will deallocate the memory for a UArray2 after it is used.
+
+   We will also include functions UArray2_width(), UArray2_height(), and
+   UArray2_size() and they will return respectively the width and height of the
+   array(s) and the size of the elements stored in it.
+
+   In order to access the element at a given index, we will include
+   UArray2_at(), which will return a pointer to the element at that index.
+
+   Finally, there will be two functions for mapping the contents of the array.
+   UArray2_map_row_major() will call a passed function (the argument apply())
+   on each element in the array by going through in row then column order.
+   UArray2_map_col_major() will perform the same operation as row_major except
+   in column then row order.
+
+3. What examples do you have of what the functions are supposed to do?
+
+   _new() will allocate the correct amount of memory (based on height, width, 
+   size of elements) for the UArray2. _free() will deallocate the memory 
+   previously made by _new() and delete the UArray2.
+
+   _size(), _width(), and _height() will return the element size of the array,
+   width of the array, and height of the array.
+
+   _at() will return a pointer to the element that is at the index that the user
+   requested.
+
+   The two map functions (row_major and col_major) will perform a passed
+   function (passed with a function pointer) on all elements of the 2D array.
+
+4. What representation will you use, and what invariants will it satisfy?
+   (This question is especially important to answer precisely.)
+
+   In order to represent a 2D UArray2, we will use on large UArray. The length
+   of this UArray will be the product of the height and width of the intended
+   2D array. In order to index from this single 1D array, we will use a
+   function to convert the 2D index to a single 1D index.
+
+   An invariant that will hold true for our array is that each element / index
+   will be either NULL or filled with a particular element. This is true of any
+   2D array and our representation will maintain this.   
+
+5. When a representation satisfies all invariants, what abstract thing from
+   step #1 does it represent? That is, what is the inverse mapping from any
+   particular representation to the abstraction that it represents (this
+   question is also especially important to answer precisely)?
+
+   In our implementation, we will be using the primary variables for elems,
+   size, length, row(s) and col(s). These individual components represent
+   individual parts of our abstract data type (UArray2).
+
+   elems (which is a UArray) will represent the 2D array holding the 
+   elements. In order to access / index these particular elements, users can
+   use row / col, which represent these indices.
+
+   size will represent the amount of memory required per element in the array.
+
+   length will represent the product of the width and height of the 2D array.
+   The user does not know that the length exists, but it represents two
+   variables that they believe are used (and it is the actual length of the 1D
+   array that we will use to implement the 2D array) 
+
+6. What test cases have you devised?
+
+   In order to test our interface and implementation, we have come up with a
+   few tests to make sure our program runs smoothly / appropriately. The first
+   two have to do with testing either full or empty arrays (running _new and
+   _free on these two types of UArray2) to make sure these work correctly.
+
+   Next we can run multiple tests to attempt to index / access outside the
+   scope of the array to make sure that the proper run-time errors are thrown.
+
+   We will also be running some test cases where the user blatantly gives us
+   the wrong information. For example, if we are requesting an integer as an
+   argument and the user gives us a NULL pointer, this should throw an error.
+
+7. What programming idioms will you need?
+
+   In our implementation, we will be using the idiom to use void ** pointers
+   because our ADT UArray2 is already a pointer to a struct and when the
+   user will attempt to free the UArray2, they must pass us a pointer to the
+   particular UArray2, which is actually a void pointer to a pointer.
+
+   In order to add a layer of abstraction, we will also be using empty structs
+   to hide member variables of our ADT. This allows the user to work with the
+   struct without actually accessing the individual components.
+
+   Also, for obvious reasons, we will be using unboxed arrays and their
+   relevant idioms.   
+
+--------------------------------------------------------------------------------
+
+Design #2: Bit2
+
+1. What is the abstract thing you are trying to represent? Often the answer will
+   be in terms of sets, sequences, and finite maps.
+  
+   In this interface, we will be representing a two-dimensional bit array.
+   The array will be defined by a width and height given by the user. Bits
+   within the array can then be accessed from the appropriate row/column index.
+
+2. What functions will you offer, and what are the contracts of that those
+   functions must meet?
+
+   This interface will have a few functions. First, we will use two functions
+   to manage the memory of a 2D bit array. Bit2_new() will allocate the space
+   for the Hanson bit array (taking in arguments of width and height). 
+   Bit2_free() will deallocate the memory for a bit array after it is used.
+
+   We will also include functions Bit2_width() and Bit2_height(), and they
+   will return respectively the width and height of the array(s).
+
+   In order to see the bit at a given index, we will include Bit2_get(), which
+   will return the bit value at that index. In order to change the bit at a
+   given index, we will include Bit2_put(), which will change the bit at the 
+   given index to the value passed to _put().
+
+   Finally, there will be two functions for mapping the bits of the array.
+   Bit2_map_row_major() will call a passed function (the argument apply())
+   on each bit in the array by going through in row then column order.
+   Bit2_map_col_major() will perform the same operation as row_major except
+   in column then row order.
+
+3. What examples do you have of what the functions are supposed to do?
+
+   _new() will allocate a Hanson Bit vector with enough space for height * 
+   width bits of memory. _free() will deallocate the memory previously made by
+   _new() and delete the array.
+
+   _width() and _height() will return the width and height of the array.
+
+   _get() will return the value of the bit that is at the index that the user 
+   requested. _put() will change the bit at the specified index to the value 
+   the user gives.
+
+   The two map functions (row_major and col_major) will perform a passed
+   function (passed with a function pointer) on all bits of the 2D array.
+
+4. What representation will you use, and what invariants will it satisfy?
+   (This question is especially important to answer precisely.)
+
+   In order to represent a 2D bit array, we will use a Hanson 1D Bit vector. 
+   The size of this vector will be the product of the height and width of the 
+   intended 2D array. In order to index from this single 1D vector, we will use
+   a function to convert the 2D index to a single 1D index.
+
+   An invariant that will hold true for our array is that each element / index
+   will be either 0 or 1 (based on the bit). This is true of any bit array and
+   our representation will maintain this.
+
+5. When a representation satisfies all invariants, what abstract thing from
+   step #1 does it represent? That is, what is the inverse mapping from any
+   particular representation to the abstraction that it represents (this
+   question is also especially important to answer precisely)?
+
+   In our implementation, we will be using the primary variables for bits,
+   length, row(s) and col(s). These individual components represent parts of 
+   our abstract data type (Bit2).
+
+   bits (which is a Hanson Bit vector) will represent the 2D array holding the 
+   bits. In order to access / index these particular bits, users can
+   use row / col, which represent these indices.
+
+   length will represent the product of the width and height of the 2D array.
+   The user does not know that the length exists, but it represents two
+   variables that they believe are used (and it is the actual length of the 1D
+   array that we will use to implement the 2D array) 
+
+6. What test cases have you devised?
+
+   In order to test our interface and implementation, we have come up with a
+   few tests to make sure our program runs smoothly / appropriately. The first
+   two have to do with testing either full or empty arrays (running _new and
+   _free on these two types of bit array) to make sure these work correctly.
+
+   Next we can run multiple tests to attempt to index / access outside the
+   scope of the array to make sure that the proper run-time errors are thrown.
+
+   We will also be running some test cases where the user blatantly gives us
+   the wrong information. For example, if we are requesting an integer as an
+   argument and the user gives us a NULL pointer, this should throw an error.
+
+7. What programming idioms will you need?
+   
+   In our implementation, we will be using the idiom to use void ** pointers
+   because our ADT Bit2 is already a pointer to a struct and when the
+   user will attempt to free the Bit2, they must pass us a pointer to the
+   particular Bit2, which is actually a void pointer to a pointer.
+
+   In order to add a layer of abstraction, we will also be using empty structs
+   to hide member variables of our ADT. This allows the user to work with the
+   struct without actually accessing the individual components. 
