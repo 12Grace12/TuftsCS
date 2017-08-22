@@ -1,0 +1,48 @@
+sigma:
+0
+1
+
+Q:
+q0
+q1
+q2
+q3
+q4
+q5
+q6
+q7
+q8
+q9
+q10
+
+delta:
+# checking for first (00|11)*
+<q0, 0>   -> q1
+<q0, 1>   -> q2
+<q0, eps> -> q3
+<q1, 0>   -> q3
+<q2, 1>   -> q3
+<q3, eps> -> q0
+
+# checking for first 10
+<q3, 1> -> q4
+<q4, 0> -> q5
+
+# checking for second (11|00)*
+<q5, 0>   -> q6
+<q5, 1>   -> q7
+<q5, eps> -> q8
+<q6, 0>   -> q8
+<q7, 1>   -> q8
+<q8, eps> -> q5
+
+# checking for second 10
+<q8, 1> -> q9
+<q9, 0> -> q10
+
+# checking for (0|1)*
+<q10, 0> -> q10
+<q10, 1> -> q10
+
+accept:
+q10

@@ -1,0 +1,219 @@
+NAME: Benjamin Tanen
+STATE: q0 qa qr q1 q2 q3 q4 q5 q6 q7 q8 q9 q10 q11 q12 q13 q14 q15 q16 q17 q18 q19 q20 q21 q22 q23 q24 q25 q26 q27 q28 q29 q30
+SIGMA: 0 1
+GAMMA: 0 1 B 0x 1x 0s 1s #
+START: q0
+ACCEPT: qa
+REJECT: qr
+DELTA:
+; check for empty string (reject)
+; or string "01", where x and y are empty strings (accept)
+q0 B qr
+q0 0 q1 0x R
+q0 1 q4 1x R
+q1 B qr
+q1 0 q5 0x R
+q1 1 q2 1x R
+q2 B qa
+q2 0 qr
+q2 1 qr
+
+; mark two characters in y
+q3 0 q4 0x R
+q3 1 q4 1x R
+q3 B qr
+q4 0 q5 0x R
+q4 1 q5 1x R
+q4 B qr
+
+; skip delimiter cells and check if next cell is blank
+q5 0 q6 0 R
+q5 1 q6 1 R
+q5 B qr
+q6 0 q7 0 R
+q6 1 q7 1 R
+q6 B qr
+
+; walk until we find marked cell or end of tape
+q7 0 q7 0 R
+q7 1 q7 1 R
+q7 B q8 B L
+q7 0x q8 0x L
+q7 1x q8 1x L
+
+; mark cell in x, walk left twice (check if marked already),
+; and walk left again
+q8 0 q9 0x L
+q8 1 q9 1x L
+q9 0 q10 0 L
+q9 1 q10 1 L
+q10 0 q11 0 L
+q10 1 q11 1 L
+q10 0x qr
+q10 1x qr
+
+; walk left until we find first marked cell, walk right,
+; and restart loop at q3
+q11 0 q12 0 L
+q11 1 q12 1 L
+q11 0x q13 0x R ; break out of loop
+q11 1x q13 1x R ; break out of loop
+q12 0 q12 0 L
+q12 1 q12 1 L
+q12 0x q3 0x R
+q12 1x q3 1x R
+ 
+; mark delimiter section with #s
+q13 0 q14 # R
+q13 1 qr
+q13 B qr
+q13 0x qr
+q13 1x qr
+q14 0 qr
+q14 1 q15 # R
+q14 B qr
+q14 0x qr
+q14 1x qr
+
+; walk to end of tape and remove all xs
+; ending at the beginning of the tape
+q15 0 qr
+q15 1 qr
+q15 B q16 L B
+q15 0x q15 0x R
+q15 1x q15 1x R
+q16 0 q17 0s R ; mark first 0
+q16 1 q21 1s R ; mark first 1
+q16 0x q16 0 L
+q16 1x q16 1 L
+q16 # q16 # L
+
+;;;
+;;; check for bitwise doubles now
+;;;
+; checking for matching sets of 0s
+q17 0 q18 0x R ; mark second 0
+q17 1 qr
+q17 # qr
+q18 0 q18 0 R
+q18 1 q18 1 R
+q18 # q19 # R ; find first #
+q19 0 qr
+q19 1 qr
+q19 # q20 # R ; find second #
+q20 0 q25 0x L ; mark third 0
+q20 1 qr
+q20 # qr
+q20 0x q20 0x R
+q20 1x q20 1x R
+
+; checking for matching sets of 1s
+q21 0 qr
+q21 1 q22 1x R ; mark second 1
+q21 # qr
+q22 0 q22 0 R
+q22 1 q22 1 R
+q22 # q23 # R ; find first #
+q23 0 qr
+q23 1 qr
+q23 # q24 # R ; find second #
+q24 0 qr
+q24 1 q25 1x L ; mark third 1
+q24 # qr
+q24 0x q24 0x R
+q24 1x q24 1x R
+
+; walk back to repeat loop
+q25 0 qr
+q25 1 qr
+q25 # q26 # L ; find first #
+q25 0x q25 0x L
+q25 1x q25 1x L
+q26 0 qr
+q26 1 qr
+q26 # q27 # L ; find second #
+q26 0x qr
+q26 1x qr
+q27 0 q27 0 L
+q27 1 q27 1 L
+q27 # qr
+q27 0x q28 0x R ; found front marked cell
+q27 1x q28 1x R ; found front marked cell
+q28 0 q17 0x R
+q28 1 q21 1x R
+q28 # q29 # R
+
+; walk to end of tape and check all things marked
+q29 0 qr
+q29 1 qr
+q29 B q30 B L
+q29 # q29 # R
+q29 0x q29 0x R
+q29 1x q29 1x R
+q30 0 qr
+q30 1 qr
+q30 # q30 # L
+q30 0x q30 0x L
+q30 1x q30 1x L
+q30 0s qa ; found the start with no unmarked cells => ACCEPT!
+q30 1s qa ; found the start with no unmarked cells => ACCEPT!
+END
+
+A High Level Description can be found in p2 of this HW
+
+In cases
+01
+00010
+00110001010
+
+Out cases
+empty string
+11010 - 1s instead of 0s
+111011 - too many 1s
+
+DESCRIPTION OF STATES
+=====================
+CHECK FOR EMPTY STRING OR “01”
+q0 = check if empty string or “01”
+q1 = check for 1 in “01”
+q2 = check for B in “01”
+
+LOOP THROUGH CROSS OFF
+q3 = mark first c in y
+q4 = mark second c in y
+q5 = skip first c for y => x
+q6 = skip second c for y => x
+q7 = walk until we find marked cell or B
+q8 = mark cell and walk left
+q9 = skip first c for y <= x
+q10 = skip second c for y <= x
+q11 = check if we can break out of first loop
+q12 = walk until we find marked cell (go back to q3)
+
+MARK DELIMITER SECTION
+q13 = mark 0 with #
+q14 = mark 1 with #
+
+CLEAR MARKS AND START AT BEGINNING
+q15 = walk to end of tape
+q16 = clear Xs (and skip #s) until we find unmarked (should be front); also used to determine which cell is first in bitwise double search
+
+CHECK FOR BITWISE DOUBLES
+q17 = found first 0 (looking for second 0)
+q18 = found second 0, walking right until first #
+q19 = walking to second #
+q20 = checking for third 0
+
+q21 = found first 1 (looking for second 1)
+q22 = found second 1, waling right until first #
+q23 = walking to second #
+q24 = checking for third 1
+ 
+q25 = walking left until first #
+q26 = walking left until second #
+q27 = walking left until first marked cell (transition into search again)
+q28 = check if loop will repeat
+
+CHECK STRING
+q29 = walk to end of tape (checking if any unmarked cells exist)
+q30 = walk to front of tape (checking if any unmarked cells exist)
